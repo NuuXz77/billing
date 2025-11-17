@@ -8,6 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <title>{{ isset($title) ? $title . ' - ' . config('app.name') : config('app.name') }}</title>
 
+    {{-- Favicon --}}
+    <link rel="icon" type="image/svg+xml" href="{{ asset('img/logo/Hoci_Logo.svg') }}">
+    <link rel="alternate icon" href="{{ asset('img/logo/Hoci_Logo.svg') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>

@@ -12,12 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->id('id');
+            $table->string('user_code')->unique();
+            $table->string('master_user')->nullable();
+            $table->enum('role', ['admin', 'member'])->default('member');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('full_name');
+            $table->string('username')->unique(); //digunakan untuk subdomain nantinya
             $table->string('password');
-            $table->rememberToken();
+            $table->enum('status', ['active', 'suspended', 'deleted'])->default('active');
+            $table->string('foto_profile')->nullable(); //
+            $table->string('phone')->nullable();
+            $table->text('address')->nullable(); // alamat lengkap
+            $table->string('district')->nullable(); // kecamatan
+            $table->string('city')->nullable(); // kota
+            $table->string('province')->nullable(); // provinsi
+            $table->string('pos_code')->nullable(); // kode pos
+            $table->string('country')->nullable(); // negara
+            $table->string('company_name')->nullable(); // nama perusahaan
+            $table->timestamp('last_active')->nullable(); // terakhir aktif
             $table->timestamps();
         });
 

@@ -6,6 +6,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ isset($title) ? $title.' - '.config('app.name') : config('app.name') }}</title>
 
+    {{-- Favicon --}}
+    <link rel="icon" type="image/svg+xml" href="{{ asset('img/logo/Hoci_Logo.svg') }}">
+    <link rel="alternate icon" href="{{ asset('img/logo/Hoci_Logo.svg') }}">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen font-sans antialiased bg-base-200">

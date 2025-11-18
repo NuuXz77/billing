@@ -3,7 +3,7 @@ name: 🚀 Auto Deploy to Server
 on:
   push:
     branches:
-      - main
+      - main   # Ganti sesuai branch utama kamu
 
 jobs:
   deploy:
@@ -13,22 +13,10 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install expect
-      run: sudo apt-get update && sudo apt-get install -y expect
-
-    - name: Start ssh-agent + load private key with passphrase
-      run: |
-        eval "$(ssh-agent -s)"
-        cat << 'EOF' > /tmp/key.pem ${{ secrets.SSH_PRIVATE_KEY }}
-        EOF
-                chmod 600 /tmp/key.pem
-
-                expect <<EOF
-                spawn ssh-add /tmp/key.pem
-                expect "Enter passphrase"
-                send "${{ secrets.SSH_PASSPHRASE }}\r"
-                expect eof
-        EOF
+    - name: Setup SSH connection
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Add server to known hosts
       run: |
@@ -36,9 +24,12 @@ jobs:
         ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
     - name: Deploy to server via SSH
+      env:
+        SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-          cd htdocs/hoci.kotaciamis.com/billing/ || exit 1
+        expect << 'EOF'
+        spawn ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+          cd htdocs/hosting.kotaciamis.com/billing/ || exit 1
           git pull origin main
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
@@ -46,3 +37,11 @@ jobs:
           npm install
           npm run build
         "
+        expect {
+          "Enter passphrase for key" {
+            send "$env(SSH_PASSPHRASE)\r"
+            exp_continue
+          }
+          eof
+        }
+        EOF

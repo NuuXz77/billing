@@ -27,18 +27,19 @@ jobs:
         echo "$SSH_PRIVATE_KEY" > ~/.ssh/hoci
         chmod 600 ~/.ssh/hoci
         
-        # Use expect to handle passphrase automatically
+        # Start SSH agent and add key with passphrase
+        eval "$(ssh-agent -s)"
         sudo apt-get install -y expect
-        expect << 'EOF'
+        expect << EOF
         spawn ssh-add ~/.ssh/hoci
         expect "Enter passphrase"
-        send "$env(SSH_PASSPHRASE)\r"
+        send "$SSH_PASSPHRASE\r"
         expect eof
         EOF
 
     - name: Deploy to server via SSH
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+        ssh -i ~/.ssh/hoci -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
           cd htdocs/center.koci.web.id/billing/ || exit 1
           git pull origin main
           composer install --no-interaction --prefer-dist --optimize-autoloader

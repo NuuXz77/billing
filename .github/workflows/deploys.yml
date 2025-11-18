@@ -23,8 +23,8 @@ jobs:
       run: |
         # create temp key file
         mkdir -p ~/.ssh
-        echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
-        chmod 600 ~/.ssh/deploy_key
+        echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/hoci
+        chmod 600 ~/.ssh/hoci
 
         # start ssh-agent
         eval "$(ssh-agent -s)"
@@ -32,7 +32,7 @@ jobs:
         # add key to agent using expect to send passphrase (if key encrypted)
         /usr/bin/expect <<'EXPECT'
         set timeout 10
-        spawn ssh-add ~/.ssh/deploy_key
+        spawn ssh-add ~/.ssh/hoci
         expect {
           "Enter passphrase for*:" {
             send "$::env(SSH_PASSPHRASE)\r"

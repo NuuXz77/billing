@@ -29,9 +29,23 @@
                     <p class="text-gray-500 text-xs">Buat akun baru untuk memulai</p>
                 </div>
 
+                <!-- Toast Notification -->
+                @if(session('success'))
+                    <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <!-- Register Form -->
-                <form class="space-y-4">
-                    <!-- Grid Layout for Name & Email -->
+                <form method="POST" action="{{ route('register.post') }}" class="space-y-4">
+                    @csrf
+                    
+                    <!-- Grid Layout 2x2 untuk semua fields -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Name Input -->
                         <div>
@@ -41,10 +55,15 @@
                             <input 
                                 type="text" 
                                 id="name"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200"
+                                name="name"
+                                value="{{ old('name') }}"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('name') border-red-500 @enderror"
                                 placeholder="John Doe"
                                 required
                             >
+                            @error('name')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Email Input -->
@@ -55,15 +74,17 @@
                             <input 
                                 type="email" 
                                 id="email"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200"
+                                name="email"
+                                value="{{ old('email') }}"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('email') border-red-500 @enderror"
                                 placeholder="example@example.com"
                                 required
                             >
+                            @error('email')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
-                    </div>
 
-                    <!-- Grid Layout for Passwords -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <!-- Password Input -->
                         <div>
                             <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="password">
@@ -72,10 +93,14 @@
                             <input 
                                 type="password" 
                                 id="password"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200"
+                                name="password"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('password') border-red-500 @enderror"
                                 placeholder="********"
                                 required
                             >
+                            @error('password')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Confirm Password Input -->
@@ -86,6 +111,7 @@
                             <input 
                                 type="password" 
                                 id="password_confirmation"
+                                name="password_confirmation"
                                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200"
                                 placeholder="********"
                                 required
@@ -95,7 +121,7 @@
 
                     <!-- Terms & Conditions -->
                     <div class="flex items-start">
-                        <input type="checkbox" id="terms" class="w-3.5 h-3.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-0.5" required>
+                        <input type="checkbox" name="terms" id="terms" class="w-3.5 h-3.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 mt-0.5" required>
                         <label for="terms" class="ml-2 text-xs text-gray-600">
                             Saya setuju dengan 
                             <a href="{{ route('terms-and-conditions') }}" class="text-blue-600 hover:underline">Syarat & Ketentuan</a> 

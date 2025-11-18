@@ -29,20 +29,40 @@
                     <p class="text-gray-500 text-xs">Masuk ke akun Anda untuk melanjutkan</p>
                 </div>
 
+                <!-- Toast Notification -->
+                @if(session('success'))
+                    <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <!-- Login Form -->
-                <form class="space-y-4">
+                <form method="POST" action="{{ route('login.post') }}" class="space-y-4">
+                    @csrf
+                    
                     <!-- Email Input -->
                     <div>
                         <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="email">
-                            Email
+                            Email / Username
                         </label>
                         <input 
-                            type="email" 
+                            type="text" 
                             id="email"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200"
-                            placeholder="example@example.com"
+                            name="email"
+                            value="{{ old('email') }}"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('email') border-red-500 @enderror"
+                            placeholder="Email atau Username"
+                            autofocus
                             required
                         >
+                        @error('email')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Password Input -->
@@ -53,16 +73,20 @@
                         <input 
                             type="password" 
                             id="password"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200"
+                            name="password"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('password') border-red-500 @enderror"
                             placeholder="********"
                             required
                         >
+                        @error('password')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Remember Me & Forgot Password -->
                     <div class="flex items-center justify-between">
                         <label class="flex items-center cursor-pointer">
-                            <input type="checkbox" class="w-3.5 h-3.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <input type="checkbox" name="remember" class="w-3.5 h-3.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                             <span class="ml-2 text-xs text-gray-600">Ingat saya</span>
                         </label>
                         <a href="#" class="text-xs text-blue-600 hover:text-blue-700 font-medium hover:underline">
@@ -78,12 +102,27 @@
                     </button>
                 </form>
 
-                <!-- Divider 
-                <div class="relative my-4">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-200"></div>
-                    </div>
-                    <div class="relative flex justify-center text-xs">
+                <!-- Register Link -->
+                <div class="text-center mt-6">
+                    <p class="text-gray-600 text-xs">
+                        Belum punya akun? 
+                        <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-700 font-medium hover:underline">
+                            Daftar sekarang
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer Text -->
+            <div class="text-center mt-6">
+                <p class="text-gray-500 text-xs">
+                    &copy; 2024 Hoci. Hosting Ciamis dari Kota Ciamis Jawa Barat
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
                         <span class="px-3 bg-white text-gray-500">Atau lanjut dan dafar dengan</span>
                     </div>
                 </div> -->
@@ -124,5 +163,7 @@
             </div>
         </div>
     </div>
+    
+    @livewireScripts
 </body>
 </html>

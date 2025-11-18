@@ -15,10 +15,10 @@ class UserSeeder extends Seeder
         User::create([
             'user_code' => 'ADM-' . strtoupper(Str::random(6)),
             'role' => 'admin',
-            'email' => 'admin@example.com',
+            'email' => 'adminhoci@gmail.com',
             'full_name' => 'Administrator',
-            'username' => 'admin777',
-            'password' => Hash::make('password'),
+            'username' => 'adminhoci777',
+            'password' => Hash::make('adminhoci777'),
             'status' => 'active',
             'last_active' => now(),
         ]);
@@ -27,10 +27,10 @@ class UserSeeder extends Seeder
         User::create([
             'user_code' => 'MBR-' . strtoupper(Str::random(6)),
             'role' => 'member',
-            'email' => 'member@example.com',
+            'email' => 'member@gmail.com',
             'full_name' => 'Member User',
             'username' => 'member777',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('member777'),
             'status' => 'active',
             'last_active' => now(),
         ]);

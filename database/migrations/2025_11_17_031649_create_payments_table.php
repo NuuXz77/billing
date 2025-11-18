@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('payment_bank');
             $table->string('payment_account_name');
             $table->string('payment_account_number');
-            $table->enum('status', ['active', 'nonactive'])->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

@@ -12,12 +12,11 @@
 
         {{-- Brand/Logo --}}
         <div class="h-16 flex items-center justify-center gap-3 px-4 border-b border-base-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
-            <span x-show="sidebarOpen || hoverOpen" x-transition
-                class="text-xl font-bold whitespace-nowrap">{{ config('app.name', 'Billing') }}</span>
+            <a href="{{ route('admin-dashboard') }}" class="flex items-center gap-3 hover:opacity-80 transition-opacity duration-300">
+                <img src="{{ asset('img/logo/Hoci_Logo.svg') }}" alt="Hoci" class="h-10 w-auto">
+                <span x-show="sidebarOpen || hoverOpen" x-transition
+                    class="text-xl font-bold whitespace-nowrap">{{ config('app.name', 'Hoci') }}</span>
+            </a>
         </div>
 
         @if (auth()->user()->role === 'admin')
@@ -94,7 +93,7 @@
                         </ul>
                     </li>
 
-                    <!-- Hosting Plans -->
+                    <!-- Hosting Plans
                     <li>
                         <a href="/admin/hosting-plans" wire:navigate
                             :class="(sidebarOpen || hoverOpen) ? 'justify-start' : 'justify-center'"
@@ -108,9 +107,9 @@
                             <span x-show="sidebarOpen || hoverOpen" x-transition
                                 class="font-medium whitespace-nowrap">Hosting Plans</span>
                         </a>
-                    </li>
+                    </li> -->
 
-                    <!-- Subscriptions -->
+                    <!-- Subscriptions
                     <li>
                         <a href="/admin/subscriptions" wire:navigate
                             :class="(sidebarOpen || hoverOpen) ? 'justify-start' : 'justify-center'"
@@ -124,9 +123,9 @@
                             <span x-show="sidebarOpen || hoverOpen" x-transition
                                 class="font-medium whitespace-nowrap">Subscriptions</span>
                         </a>
-                    </li>
+                    </li> -->
 
-                    <!-- Subdomains -->
+                    <!-- Subdomains 
                     <li>
                         <a href="/admin/subdomains" wire:navigate
                             :class="(sidebarOpen || hoverOpen) ? 'justify-start' : 'justify-center'"
@@ -140,9 +139,9 @@
                             <span x-show="sidebarOpen || hoverOpen" x-transition
                                 class="font-medium whitespace-nowrap">Subdomains</span>
                         </a>
-                    </li>
+                    </li> -->
 
-                    <!-- Invoices -->
+                    <!-- Invoices 
                     <li>
                         <a href="/admin/invoices" wire:navigate
                             :class="(sidebarOpen || hoverOpen) ? 'justify-start' : 'justify-center'"
@@ -156,7 +155,7 @@
                             <span x-show="sidebarOpen || hoverOpen" x-transition
                                 class="font-medium whitespace-nowrap">Invoices</span>
                         </a>
-                    </li>
+                    </li> -->
 
                     <!-- Payments -->
                     <li>

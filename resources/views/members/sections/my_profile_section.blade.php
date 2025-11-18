@@ -29,8 +29,8 @@
                         <input type="file" id="photo-upload" class="hidden" accept="image/*">
                     </div>
                     <div class="flex-1">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-1">John Doe</h2>
-                        <p class="text-gray-600 mb-3">john@example.com</p>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-1">{{ auth()->user()->full_name ?? auth()->user()->username }}</h2>
+                        <p class="text-gray-600 mb-3">{{ auth()->user()->email }}</p>
                         <div class="flex items-center gap-2">
                             <span class="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-sm font-semibold rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
                                 Full Name <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" value="John Doe" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
+                            <input type="text" value="{{ auth()->user()->full_name ?? auth()->user()->username }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
                         </div>
 
                         {{-- Email --}}
@@ -76,7 +76,7 @@
                                 Email Address <span class="text-red-500">*</span>
                             </label>
                             <div class="relative">
-                                <input type="email" value="john@example.com" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
+                                <input type="email" value="{{ auth()->user()->email }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
                                 <div class="absolute right-3 top-1/2 -translate-y-1/2">
                                     <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>

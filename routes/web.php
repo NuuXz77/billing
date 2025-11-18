@@ -5,12 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Volt\Volt;
 
 //Route bebas tanpa middleware
-Route::post('/logout', function () {
-    Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect('/');
-})->name('logout');
+Route::post('/logout', [App\Http\Controllers\Auth\AuthController::class, 'logout'])->name('logout');
 
 Route::get('/', function () {
     return view('frontend.index');
@@ -18,9 +13,6 @@ Route::get('/', function () {
 
 //Route untuk guest
 Route::middleware('guest')->group(function () {
-
-    Route::get('/register', \App\Livewire\Auth\Register::class)->name('register');
-    Route::get('/login', \App\Livewire\Auth\Login::class)->name('login');
 
     //view untuk landing page
     Route::get('/', function () {
@@ -51,15 +43,11 @@ Route::middleware('guest')->group(function () {
         return view('frontend.landing_page', ['showCart' => true]);
     })->name('cart');
     
-    //view untuk users login
-    Route::get('/auth/login', function () {
-        return view('users.auth.login');
-    })->name('login');
-    
-    //view untuk users register
-    Route::get('/auth/register', function () {
-        return view('users.auth.register');
-    })->name('register');
+    // Authentication Routes
+    Route::get('/auth/login', [App\Http\Controllers\Auth\AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/auth/login', [App\Http\Controllers\Auth\AuthController::class, 'login'])->name('login.post');
+    Route::get('/auth/register', [App\Http\Controllers\Auth\AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/auth/register', [App\Http\Controllers\Auth\AuthController::class, 'register'])->name('register.post');
     
     Route::get('/privacy-policy', function () {
         return view('frontend.landing_page', ['showPrivacyPolicy' => true]);
@@ -69,56 +57,6 @@ Route::middleware('guest')->group(function () {
         return view('frontend.landing_page', ['showTermsAndConditions' => true]);
     })->name('terms-and-conditions');
     
-    // Dashboard route - langsung pakai users.blade.php
-    Route::get('/dashboard', function () {
-        return view('users.users');
-    })->name('dashboard');
-    
-    // Hosting Routes
-    Route::get('/hosting/plans', function () {
-        return view('users.users', ['section' => 'hosting-plans']);
-    })->name('hosting.plans');
-    
-    Route::get('/hosting/subscriptions', function () {
-        return view('users.users', ['section' => 'my-subscriptions']);
-    })->name('hosting.subscriptions');
-    
-    Route::get('/hosting/manage', function () {
-        return view('users.users', ['section' => 'manage-hosting']);
-    })->name('hosting.manage');
-    
-    // Domains Routes
-    Route::get('/domains/subdomains', function () {
-        return view('users.users', ['section' => 'my-subdomains']);
-    })->name('domains.subdomains');
-    
-    Route::get('/domains/dns', function () {
-        return view('users.users', ['section' => 'dns-settings']);
-    })->name('domains.dns');
-    
-    // Billing Routes
-    Route::get('/billing/invoices', function () {
-        return view('users.users', ['section' => 'invoices']);
-    })->name('billing.invoices');
-    
-    Route::get('/billing/history', function () {
-        return view('users.users', ['section' => 'transaction-history']);
-    })->name('billing.history');
-    
-    // User Routes
-    Route::get('/user/profile', function () {
-        return view('users.users', ['section' => 'my-profile']);
-    })->name('user.profile');
-    
-    Route::get('/user/settings', function () {
-        return view('users.users', ['section' => 'account-settings']);
-    })->name('user.settings');
-    
-    // Support Routes
-    Route::get('/support/live-chat', function () {
-        return view('users.users', ['section' => 'live-chat']);
-    })->name('support.live_chat');
-        // Volt::route('/register', 'auth.register')->name('register');
 });
 
 //ingin menambahkan file route lain

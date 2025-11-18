@@ -25,31 +25,31 @@
 </head>
 <body class="min-screen font-sans antialiased bg-base-200">
     {{-- Top Navbar --}}
-    @include('users.sections.partials.navbar_section')
+    @include('members.sections.partials.navbar_section')
     
     {{-- Content Sections --}}
     @if(!isset($section))
-        @include('users.sections.dashboard_section')
+        @include('members.sections.dashboard_section')
     @elseif($section === 'hosting-plans')
-        @include('users.sections.hosting_plans_section')
+        @include('members.sections.hosting_plans_section')
     @elseif($section === 'my-subscriptions')
-        @include('users.sections.my_subscriptions_section')
+        @include('members.sections.my_subscriptions_section')
     @elseif($section === 'manage-hosting')
-        @include('users.sections.manage_hosting_section')
+        @include('members.sections.manage_hosting_section')
     @elseif($section === 'my-subdomains')
-        @include('users.sections.my_subdomains_section')
+        @include('members.sections.my_subdomains_section')
     @elseif($section === 'dns-settings')
-        @include('users.sections.dns_settings_section')
+        @include('members.sections.dns_settings_section')
     @elseif($section === 'invoices')
-        @include('users.sections.invoices_section')
+        @include('members.sections.invoices_section')
     @elseif($section === 'transaction-history')
-        @include('users.sections.transaction_history_section')
+        @include('members.sections.transaction_history_section')
     @elseif($section === 'my-profile')
-        @include('users.sections.my_profile_section')
+        @include('members.sections.my_profile_section')
     @elseif($section === 'account-settings')
-        @include('users.sections.account_settings_section')
+        @include('members.sections.account_settings_section')
     @elseif($section === 'live-chat')
-        @include('users.sections.live_chat_section')
+        @include('members.sections.live_chat_section')
     @endif
     
     {{--  TOAST area --}}

@@ -3,7 +3,7 @@ name: 🚀 Auto Deploy to Server
 on:
   push:
     branches:
-      - main   # Ganti sesuai branch utama kamu
+      - main
 
 jobs:
   deploy:
@@ -13,11 +13,26 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Setup SSH connection
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
+    - name: Install expect
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y expect
+
+    - name: Setup SSH agent + add private key + auto passphrase
+      run: |
+        eval "$(ssh-agent -s)"
+        expect << EOF
+          spawn ssh-add hoci
+          expect "Enter passphrase for*"
+          send "${{ secrets.SSH_PASSPHRASE }}\r"
+          expect eof
+          EOF
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+
+    - name: Add server to known_hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
     - name: Deploy to server via SSH
       run: |

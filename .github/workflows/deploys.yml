@@ -3,29 +3,28 @@ name: 🚀 Auto Deploy to Server
 on:
   push:
     branches:
-      - main   # Ganti sesuai branch utama kamu
+      - main # Ganti sesuai branch utama kamu
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup SSH connection
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
-    - name: Deploy to server via SSH
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-          cd htdocs/center.koci.web.id/billing/ || exit 1
-          git pull origin main
-          composer install --no-interaction --prefer-dist --optimize-autoloader
-          php artisan migrate --force
-          php artisan optimize:clear
-          npm install
-          npm run build
-        "
+      - name: SSH & Deploy
+  uses: appleboy/ssh-action@v1.0.3
+  with:
+    host: ${{ secrets.SERVER_HOST }}
+    username: ${{ secrets.SERVER_USER }}
+    key: ${{ secrets.SSH_PRIVATE_KEY }}
+    passphrase: ${{ secrets.SSH_PASSPHRASE }}
+    script: |
+      cd htdocs/center.koci.web.id/billing/ || exit 1
+      git pull origin main
+      composer install --no-interaction --prefer-dist --optimize-autoloader
+      php artisan migrate --force
+      php artisan optimize:clear
+      npm install
+      npm run build

@@ -13,18 +13,22 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # OVERRIDE ssh-add supaya bisa auto-input passphrase
-    - name: Create ssh-add wrapper with passphrase
-      run: |
-        echo -e '#!/usr/bin/expect\nspawn ssh-add -\nexpect "Enter passphrase for*"\nsend "$ENV(SSH_PASSPHRASE)\r"\nexpect eof' > ssh-add-wrapper
-        chmod +x ssh-add-wrapper
-        sudo mv ssh-add-wrapper /usr/local/bin/ssh-add
+    - name: Install expect
+      run: sudo apt-get update && sudo apt-get install -y expect
 
-    # Pake ssh-agent seperti biasa, tapi ssh-add sudah kita patch
-    - name: Setup SSH connection
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Start ssh-agent + load private key with passphrase
+      run: |
+        eval "$(ssh-agent -s)"
+        cat << 'EOF' > /tmp/key.pem ${{ secrets.SSH_PRIVATE_KEY }}
+        EOF
+                chmod 600 /tmp/key.pem
+
+                expect <<EOF
+                spawn ssh-add /tmp/key.pem
+                expect "Enter passphrase"
+                send "${{ secrets.SSH_PASSPHRASE }}\r"
+                expect eof
+        EOF
 
     - name: Add server to known hosts
       run: |
@@ -42,5 +46,3 @@ jobs:
           npm install
           npm run build
         "
-      env:
-        SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}

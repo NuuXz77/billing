@@ -45,23 +45,43 @@
                 <form method="POST" action="{{ route('register.post') }}" class="space-y-4">
                     @csrf
                     
-                    <!-- Grid Layout 2x2 untuk semua fields -->
+                    <!-- Grid Layout 2x3 untuk semua fields -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Name Input -->
+                        <!-- Full Name Input -->
                         <div>
-                            <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="name">
-                                Nama Lengkap
+                            <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="full_name">
+                                Nama Lengkap *
                             </label>
                             <input 
                                 type="text" 
-                                id="name"
-                                name="name"
-                                value="{{ old('name') }}"
-                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('name') border-red-500 @enderror"
+                                id="full_name"
+                                name="full_name"
+                                value="{{ old('full_name') }}"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('full_name') border-red-500 @enderror"
                                 placeholder="John Doe"
                                 required
                             >
-                            @error('name')
+                            @error('full_name')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Username Input -->
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="username">
+                                Username *
+                            </label>
+                            <input 
+                                type="text" 
+                                id="username"
+                                name="username"
+                                value="{{ old('username') }}"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('username') border-red-500 @enderror"
+                                placeholder="johndoe"
+                                required
+                            >
+                            <p class="text-xs text-gray-500 mt-1">Username untuk subdomain hosting</p>
+                            @error('username')
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
@@ -69,7 +89,7 @@
                         <!-- Email Input -->
                         <div>
                             <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="email">
-                                Email
+                                Email *
                             </label>
                             <input 
                                 type="email" 
@@ -85,10 +105,29 @@
                             @enderror
                         </div>
 
+                        <!-- Phone Input -->
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="phone">
+                                No. Telepon *
+                            </label>
+                            <input 
+                                type="text" 
+                                id="phone"
+                                name="phone"
+                                value="{{ old('phone') }}"
+                                class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('phone') border-red-500 @enderror"
+                                placeholder="08123456789"
+                                required
+                            >
+                            @error('phone')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- Password Input -->
                         <div>
                             <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="password">
-                                Password
+                                Password *
                             </label>
                             <input 
                                 type="password" 
@@ -106,7 +145,7 @@
                         <!-- Confirm Password Input -->
                         <div>
                             <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="password_confirmation">
-                                Konfirmasi Password
+                                Konfirmasi Password *
                             </label>
                             <input 
                                 type="password" 
@@ -117,6 +156,22 @@
                                 required
                             >
                         </div>
+                    </div>
+
+                    <!-- Address (Optional) -->
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="address">
+                            Alamat (Opsional)
+                        </label>
+                        <textarea 
+                            id="address"
+                            name="address"
+                            rows="3"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700 transition-all duration-200 @error('address') border-red-500 @enderror"
+                            placeholder="Alamat lengkap...">{{ old('address') }}</textarea>
+                        @error('address')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Terms & Conditions -->

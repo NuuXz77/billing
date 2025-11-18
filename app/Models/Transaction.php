@@ -12,9 +12,16 @@ class Transaction extends Model
         'user_id',
         'product_id',
         'payment_id',
-        'amount',
         'status',
-        'transaction_date',
+        'start_date',
+        'end_date',
+        'total_payment',
+        'subdomain_web',
+        'subdomain_server',
+        'billing_cycle',
+        'payment_proof',
+        'admin_notes',
+        'confirmed_at',
     ];
 
     // relasi ke user

@@ -18,6 +18,7 @@ class Products extends Model
         'storage',
         'price_monthly',
         'description',
+        'status',
     ];
 
     // relasi ke transaksi

@@ -6,7 +6,7 @@
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
                     <h1 class="text-4xl font-bold text-gray-900 mb-2">
-                        Welcome back, <span class="text-gray-900">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
+                        Welcome back, <span class="text-primary">{{ auth()->user()->full_name ?? auth()->user()->username }}</span>
                     </h1>
                 </div>
                 <div class="flex items-center gap-3">

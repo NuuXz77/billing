@@ -14,7 +14,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 // Route untuk members (require authentication)
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'role:member'])->group(function () {
     // Dashboard route - langsung pakai users.blade.php
     Route::get('/dashboard', function () {
         return view('members.members');

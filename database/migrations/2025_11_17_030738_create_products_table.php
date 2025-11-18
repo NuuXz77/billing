@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->unsignedInteger('storage'); // dalam GB atau MB
             $table->decimal('price_monthly', 10, 2);
             $table->text('description')->nullable();
+            $table->boolean('status')->default(true); // true = public, false = draft
             $table->timestamps();
         });
     }

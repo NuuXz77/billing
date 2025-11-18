@@ -22,7 +22,7 @@
 
         .livewire-progress-bar {
             position: fixed;
-            top: 0;
+            \p: 0;
             left: 0;
             right: 0;
             height: 3px;

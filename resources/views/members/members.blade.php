@@ -22,6 +22,8 @@
     
     {{-- Stack untuk styles tambahan dari child views --}}
     @stack('styles')
+
+    @livewireStyles
 </head>
 <body class="min-screen font-sans antialiased bg-base-200">
     {{-- Top Navbar --}}
@@ -52,10 +54,9 @@
         @include('members.sections.live_chat_section')
     @endif
     
-    {{--  TOAST area --}}
-    <x-toast />
     
     {{-- Stack untuk scripts tambahan dari child views --}}
     @stack('scripts')
+    @livewireScripts
 </body>
 </html>

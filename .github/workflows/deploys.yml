@@ -3,7 +3,7 @@ name: 🚀 Auto Deploy to Server
 on:
   push:
     branches:
-      - main   # Ganti sesuai branch utama kamu
+      - main
 
 jobs:
   deploy:
@@ -13,27 +13,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install expect
-      run: sudo apt-get update && sudo apt-get install -y expect
-
-    - name: Setup SSH connection
-      run: |
-        eval "$(ssh-agent -s)"
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | expect -c "
-        spawn ssh-add "${{ secrets.SERVER_USER }}"
-        expect \"Enter passphrase for*\"
-        send \"${{ secrets.SSH_PASSPHRASE }}\r\"
-        expect eof
-        "
-
-    - name: Add server to known hostss
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
-
     - name: Deploy to server via SSH
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        passphrase: ${{ secrets.SSH_PASSPHRASE }}
+        script: |
           cd htdocs/hosting.kotaciamis.com/billing/ || exit 1
           git pull origin main
           composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -41,4 +28,3 @@ jobs:
           php artisan optimize:clear
           npm install
           npm run build
-        "

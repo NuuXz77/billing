@@ -13,28 +13,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install expect
-      run: sudo apt-get update && sudo apt-get install -y expect
-
     - name: Setup SSH connection
-      run: |
-        eval "$(ssh-agent -s)"
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | expect -c "
-        spawn ssh-add "${{ secrets.SERVER_USER }}"
-        expect \"Enter passphrase for*\"
-        send \"${{ secrets.SSH_PASSPHRASE }}\r\"
-        expect eof
-        "
-
-    - name: Add server to known hosts
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
-
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
     - name: Deploy to server via SSH
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-          cd htdocs/hosting.kotaciamis.com/billing/ || exit 1
+          cd htdocs/center.koci.web.id/billing/ || exit 1
           git pull origin main
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force

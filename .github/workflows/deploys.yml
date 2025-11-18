@@ -26,7 +26,7 @@ jobs:
         expect eof
         "
 
-    - name: Add server to known hosts
+    - name: Add server to known hostss
       run: |
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts

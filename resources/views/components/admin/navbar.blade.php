@@ -107,7 +107,7 @@
                 </li>
                 <div class="divider my-0"></div>
                 <li>
-                    <button onclick="Livewire.dispatch('confirmLogout')" class="text-error hover:bg-error/10">
+                    <button type="button" onclick="document.getElementById('logout-form').submit()" class="text-error hover:bg-error/10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -119,7 +119,8 @@
             </ul>
         </div>
     </div>
-
-    {{-- Logout Modal Component (placed at navbar level) --}}
-    <livewire:auth.logout />
 </div>
+
+<form id="logout-form" method="POST" action="{{ route('logout') }}" style="display: none;">
+    @csrf
+</form>

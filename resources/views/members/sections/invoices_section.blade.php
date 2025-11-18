@@ -401,8 +401,8 @@
                     <div class="grid grid-cols-2 gap-8 mb-8">
                         <div>
                             <h3 class="font-bold text-gray-900 mb-3">Bill To:</h3>
-                            <p class="text-gray-900 font-semibold">John Doe</p>
-                            <p class="text-gray-600 text-sm">john@example.com</p>
+                            <p class="text-gray-900 font-semibold">{{ auth()->user()->full_name ?? auth()->user()->username }}</p>
+                            <p class="text-gray-600 text-sm">{{ auth()->user()->email }}</p>
                             <p class="text-gray-600 text-sm mt-2">Jakarta, Indonesia</p>
                         </div>
                         <div>

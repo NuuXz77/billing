@@ -3,7 +3,7 @@ name: 🚀 Auto Deploy to Server
 on:
   push:
     branches:
-      - main   # Ganti sesuai branch utama kamu
+      - main
 
 jobs:
   deploy:
@@ -13,16 +13,28 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    # OVERRIDE ssh-add supaya bisa auto-input passphrase
+    - name: Create ssh-add wrapper with passphrase
+      run: |
+        echo -e '#!/usr/bin/expect\nspawn ssh-add -\nexpect "Enter passphrase for*"\nsend "$ENV(SSH_PASSPHRASE)\r"\nexpect eof' > ssh-add-wrapper
+        chmod +x ssh-add-wrapper
+        sudo mv ssh-add-wrapper /usr/local/bin/ssh-add
+
+    # Pake ssh-agent seperti biasa, tapi ssh-add sudah kita patch
     - name: Setup SSH connection
       uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-        ssh-passphrase: ${{ secrets.SSH_PASSPHRASE }}
+
+    - name: Add server to known hosts
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
     - name: Deploy to server via SSH
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-          cd htdocs/center.koci.web.id/billing/ || exit 1
+          cd htdocs/hoci.kotaciamis.com/billing/ || exit 1
           git pull origin main
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
@@ -30,3 +42,5 @@ jobs:
           npm install
           npm run build
         "
+      env:
+        SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}

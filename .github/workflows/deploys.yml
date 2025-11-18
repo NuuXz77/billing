@@ -3,7 +3,7 @@ name: 🚀 Auto Deploy to Server
 on:
   push:
     branches:
-      - main   # Ganti sesuai branch utama kamu
+      - main
 
 jobs:
   deploy:
@@ -13,32 +13,69 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install expect
+    - name: Install expect (for providing passphrase to ssh-add)
       run: sudo apt-get update && sudo apt-get install -y expect
 
-    - name: Setup SSH connection
+    - name: Prepare private key on runner and start ssh-agent
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
       run: |
-        eval "$(ssh-agent -s)"
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | expect -c "
-        spawn ssh-add "${{ secrets.SERVER_USER }}"
-        expect \"Enter passphrase for*\"
-        send \"${{ secrets.SSH_PASSPHRASE }}\r\"
-        expect eof
-        "
+        # create temp key file
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
 
-    - name: Add server to known hostss
+        # start ssh-agent
+        eval "$(ssh-agent -s)"
+
+        # add key to agent using expect to send passphrase (if key encrypted)
+        /usr/bin/expect <<'EXPECT'
+        set timeout 10
+        spawn ssh-add ~/.ssh/deploy_key
+        expect {
+          "Enter passphrase for*:" {
+            send "$::env(SSH_PASSPHRASE)\r"
+            exp_continue
+          }
+          eof
+        }
+        EXPECT
+
+        # verify key added
+        ssh-add -l
+
+    - name: Add server to known hosts (runner side)
       run: |
         mkdir -p ~/.ssh
         ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+        # also ensure github.com host key known on the server (so remote git won't prompt)
+        ssh-keyscan -H github.com > /tmp/github_known_hosts
 
-    - name: Deploy to server via SSH
+    - name: Deploy to server (use agent forwarding -A)
+      env:
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+        SERVER_HOST: ${{ secrets.SERVER_HOST }}
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+        # copy github known_hosts to server to avoid host-check prompt when server connects to github
+        ssh -A -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST "mkdir -p ~/.ssh && chmod 700 ~/.ssh"
+        scp -o StrictHostKeyChecking=no /tmp/github_known_hosts $SERVER_USER@$SERVER_HOST:~/.ssh/known_hosts
+
+        # Now ssh into server with agent forwarding and run deploy commands.
+        # -A enables agent forwarding so server can use the key we added on the runner to access GitHub.
+        ssh -A -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST <<'REMOTE'
+          set -e
           cd htdocs/hosting.kotaciamis.com/billing/ || exit 1
-          git pull origin main
+
+          # optional: show git remote - useful for debugging permission issues
+          git remote -v
+
+          # pull using SSH (this will use forwarded agent)
+          GIT_SSH_COMMAND='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' git pull origin main
+
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force
           php artisan optimize:clear
           npm install
           npm run build
-        "
+        REMOTE

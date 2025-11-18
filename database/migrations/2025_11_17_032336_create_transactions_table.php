@@ -17,13 +17,16 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade');
-            $table->enum('status', ['active', 'pending_payment', 'pending_confirm', 'expired', 'canceled', 'refunded'])->default('active');
+            $table->enum('status', ['active', 'pending_payment', 'pending_confirm', 'expired', 'canceled', 'refunded', 'rejected'])->default('pending_payment');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->decimal('total_payment', 10, 2);
             $table->string('subdomain_web')->nullable();
             $table->string('subdomain_server')->nullable();
-            $table->enum('billing_cycle', ['monthly', 'yearly', 'custum'])->default('monthly');
+            $table->enum('billing_cycle', ['monthly', 'yearly', 'custom'])->default('monthly');
+            $table->string('payment_proof')->nullable(); // Nama file image saja, file asli di storage
+            $table->text('admin_notes')->nullable(); // Admin notes for approval/rejection
+            $table->timestamp('confirmed_at')->nullable(); // When admin confirmed payment
             
             $table->timestamps();
         });

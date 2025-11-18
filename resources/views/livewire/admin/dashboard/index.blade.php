@@ -3,9 +3,9 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="card bg-base-100 border border-base-300">
             <div class="card-body">
-                <h2 class="card-title text-gray-300">Total Member</h2>
+                <h2 class="card-title">Total Member</h2>
                 <div class="flex justify-between items-center">
-                    <p class="text-3xl font-bold">42</p>
+                    <p class="text-3xl font-bold">{{ number_format($totalMembers) }}</p>
                     <div class="flex items-center gap-1">
                         <div class="badge badge-success badge-soft">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-3" fill="none" viewBox="0 0 24 24"
@@ -13,18 +13,18 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 10l7-7m0 0l7 7m-7-7v18" />
                             </svg>
-                            5%
+                            +{{ $totalMembers > 0 ? '100' : '0' }}%
                         </div>
-                        <p class="text-base-300">Minggu ini</p>
+                        <p class="text-neutral">Total</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card bg-base-100 border border-base-300">
             <div class="card-body">
-                <h2 class="card-title text-gray-300">Langganan Aktif</h2>
+                <h2 class="card-title">Langganan Aktif</h2>
                 <div class="flex justify-between items-center">
-                    <p class="text-3xl font-bold">42</p>
+                    <p class="text-3xl font-bold">{{ number_format($activeSubscriptions) }}</p>
                     <div class="flex items-center gap-1">
                         <div class="badge badge-success badge-soft">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-3" fill="none" viewBox="0 0 24 24"
@@ -32,37 +32,18 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 10l7-7m0 0l7 7m-7-7v18" />
                             </svg>
-                            5%
+                            {{ $activeSubscriptions > 0 ? 'Active' : 'None' }}
                         </div>
-                        <p class="text-base-300">Minggu ini</p>
+                        <p class="text-neutral">Status</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card bg-base-100 border border-base-300">
             <div class="card-body">
-                <h2 class="card-title text-gray-300">Pendapatan</h2>
+                <h2 class="card-title">Pendapatan</h2>
                 <div class="flex justify-between items-center">
-                    <p class="text-3xl font-bold">Rp10.000</p>
-                    <div class="flex items-center gap-1">
-                        <div class="badge badge-error badge-soft">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-3" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                            </svg>
-                            5%
-                        </div>
-                        <p class="text-base-300">Minggu ini</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card bg-base-100 border border-base-300">
-            <div class="card-body">
-                <h2 class="card-title text-gray-300">Faktur Tertunda</h2>
-                <div class="flex justify-between items-center">
-                    <p class="text-3xl font-bold">39</p>
+                    <p class="text-3xl font-bold">Rp{{ number_format($totalRevenue, 0, ',', '.') }}</p>
                     <div class="flex items-center gap-1">
                         <div class="badge badge-success badge-soft">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-3" fill="none" viewBox="0 0 24 24"
@@ -70,9 +51,28 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 10l7-7m0 0l7 7m-7-7v18" />
                             </svg>
-                            5%
+                            Total
                         </div>
-                        <p class="text-base-300">Minggu ini</p>
+                        <p class="text-neutral">Aktif</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card bg-base-100 border border-base-300">
+            <div class="card-body">
+                <h2 class="card-title">Faktur Tertunda</h2>
+                <div class="flex justify-between items-center">
+                    <p class="text-3xl font-bold">{{ number_format($pendingInvoices) }}</p>
+                    <div class="flex items-center gap-1">
+                        <div class="badge {{ $pendingInvoices > 0 ? 'badge-warning' : 'badge-success' }} badge-soft">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-3" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="{{ $pendingInvoices > 0 ? 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z' : 'M5 10l7-7m0 0l7 7m-7-7v18' }}" />
+                            </svg>
+                            {{ $pendingInvoices > 0 ? 'Pending' : 'Clear' }}
+                        </div>
+                        <p class="text-neutral">Status</p>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@
         <div class="lg:col-span-2 card bg-base-100 border border-base-300">
             <div class="card-body">
                 <h2 class="card-title">Chart Pendapatan</h2>
-                <p class="text-base-content/60">This section will display recent user activities.</p>
+                <p class="text-base-content/60">Grafik pendapatan dari transaksi aktif.</p>
                 <div id="chart"></div>
             </div>
         </div>
@@ -93,37 +93,29 @@
                 <h2 class="card-title">Langganan Terbaru</h2>
                 <div class="overflow-x-auto">
                     <table class="table">
-                        <!-- head -->
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
-                                <th>Job</th>
-                                <th>Favorite Color</th>
+                                <th>User</th>
+                                <th>Produk</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- row 1 -->
+                            @forelse($recentTransactions as $index => $transaction)
                             <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>Blue</td>
+                                <th>{{ $index + 1 }}</th>
+                                <td>{{ $transaction->user->name }}</td>
+                                <td>{{ $transaction->product->name_product }}</td>
+                                <td>
+                                    <span class="badge badge-success">{{ ucfirst($transaction->status) }}</span>
+                                </td>
                             </tr>
-                            <!-- row 2 -->
+                            @empty
                             <tr>
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>Desktop Support Technician</td>
-                                <td>Purple</td>
+                                <td colspan="4" class="text-center text-gray-500">Belum ada langganan</td>
                             </tr>
-                            <!-- row 3 -->
-                            <tr>
-                                <th>3</th>
-                                <td>Brice Swyre</td>
-                                <td>Tax Accountant</td>
-                                <td>Red</td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -135,41 +127,32 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
         <div class="card bg-base-100 border border-base-300">
             <div class="card-body">
-                <h2 class="card-title">Paket Hosting Terbaik</h2>
-                {{-- <p class="text-base-content/60">This section will display recent user activities.</p> --}}
+                <h2 class="card-title">Paket Hosting Terpopuler</h2>
                 <div class="overflow-x-auto">
                     <table class="table">
-                        <!-- head -->
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
-                                <th>Job</th>
-                                <th>Favorite Color</th>
+                                <th>Produk</th>
+                                <th>Harga</th>
+                                <th>Transaksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- row 1 -->
+                            @forelse($popularProducts as $index => $product)
                             <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>Blue</td>
+                                <th>{{ $index + 1 }}</th>
+                                <td>{{ $product->name_product }}</td>
+                                <td>Rp{{ number_format($product->price_monthly, 0, ',', '.') }}</td>
+                                <td>
+                                    <span class="badge badge-primary">{{ $product->transactions_count }} transaksi</span>
+                                </td>
                             </tr>
-                            <!-- row 2 -->
+                            @empty
                             <tr>
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>Desktop Support Technician</td>
-                                <td>Purple</td>
+                                <td colspan="4" class="text-center text-gray-500">Belum ada data produk</td>
                             </tr>
-                            <!-- row 3 -->
-                            <tr>
-                                <th>3</th>
-                                <td>Brice Swyre</td>
-                                <td>Tax Accountant</td>
-                                <td>Red</td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -180,145 +163,45 @@
                 <h2 class="card-title">Ringkasan Langganan Aktif</h2>
                 <div class="overflow-x-auto">
                     <table class="table">
-                        <!-- head -->
                         <thead>
                             <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" class="checkbox" />
-                                    </label>
-                                </th>
-                                <th>Name</th>
-                                <th>Job</th>
-                                <th>Favorite Color</th>
-                                <th></th>
+                                <th>User</th>
+                                <th>Produk</th>
+                                <th>Berakhir</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- row 1 -->
+                            @forelse($recentTransactions->take(4) as $transaction)
                             <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" class="checkbox" />
-                                    </label>
-                                </th>
                                 <td>
                                     <div class="flex items-center gap-3">
                                         <div class="avatar">
-                                            <div class="mask mask-squircle h-12 w-12">
-                                                <img src="https://img.daisyui.com/images/profile/demo/2@94.webp"
-                                                    alt="Avatar Tailwind CSS Component" />
+                                            <div class="mask mask-squircle h-12 w-12 bg-primary text-white flex items-center justify-center">
+                                                {{ strtoupper(substr($transaction->user->name, 0, 1)) }}
                                             </div>
                                         </div>
                                         <div>
-                                            <div class="font-bold">Hart Hagerty</div>
-                                            <div class="text-sm opacity-50">United States</div>
+                                            <div class="font-bold">{{ $transaction->user->name }}</div>
+                                            <div class="text-sm opacity-50">{{ $transaction->user->email }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    Zemlak, Daniel and Leannon
+                                    {{ $transaction->product->name_product }}
                                     <br />
-                                    <span class="badge badge-ghost badge-sm">Desktop Support Technician</span>
+                                    <span class="badge badge-ghost badge-sm">{{ ucfirst($transaction->billing_cycle) }}</span>
                                 </td>
-                                <td>Purple</td>
+                                <td>{{ \Carbon\Carbon::parse($transaction->end_date)->format('d M Y') }}</td>
                                 <th>
                                     <button class="btn btn-ghost btn-xs">details</button>
                                 </th>
                             </tr>
-                            <!-- row 2 -->
+                            @empty
                             <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" class="checkbox" />
-                                    </label>
-                                </th>
-                                <td>
-                                    <div class="flex items-center gap-3">
-                                        <div class="avatar">
-                                            <div class="mask mask-squircle h-12 w-12">
-                                                <img src="https://img.daisyui.com/images/profile/demo/3@94.webp"
-                                                    alt="Avatar Tailwind CSS Component" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="font-bold">Brice Swyre</div>
-                                            <div class="text-sm opacity-50">China</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    Carroll Group
-                                    <br />
-                                    <span class="badge badge-ghost badge-sm">Tax Accountant</span>
-                                </td>
-                                <td>Red</td>
-                                <th>
-                                    <button class="btn btn-ghost btn-xs">details</button>
-                                </th>
+                                <td colspan="4" class="text-center text-gray-500">Belum ada langganan aktif</td>
                             </tr>
-                            <!-- row 3 -->
-                            <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" class="checkbox" />
-                                    </label>
-                                </th>
-                                <td>
-                                    <div class="flex items-center gap-3">
-                                        <div class="avatar">
-                                            <div class="mask mask-squircle h-12 w-12">
-                                                <img src="https://img.daisyui.com/images/profile/demo/4@94.webp"
-                                                    alt="Avatar Tailwind CSS Component" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="font-bold">Marjy Ferencz</div>
-                                            <div class="text-sm opacity-50">Russia</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    Rowe-Schoen
-                                    <br />
-                                    <span class="badge badge-ghost badge-sm">Office Assistant I</span>
-                                </td>
-                                <td>Crimson</td>
-                                <th>
-                                    <button class="btn btn-ghost btn-xs">details</button>
-                                </th>
-                            </tr>
-                            <!-- row 4 -->
-                            <tr>
-                                <th>
-                                    <label>
-                                        <input type="checkbox" class="checkbox" />
-                                    </label>
-                                </th>
-                                <td>
-                                    <div class="flex items-center gap-3">
-                                        <div class="avatar">
-                                            <div class="mask mask-squircle h-12 w-12">
-                                                <img src="https://img.daisyui.com/images/profile/demo/5@94.webp"
-                                                    alt="Avatar Tailwind CSS Component" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="font-bold">Yancy Tear</div>
-                                            <div class="text-sm opacity-50">Brazil</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    Wyman-Ledner
-                                    <br />
-                                    <span class="badge badge-ghost badge-sm">Community Outreach Specialist</span>
-                                </td>
-                                <td>Indigo</td>
-                                <th>
-                                    <button class="btn btn-ghost btn-xs">details</button>
-                                </th>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -333,37 +216,44 @@
                 <h2 class="card-title">Pembayaran Terbaru</h2>
                 <div class="overflow-x-auto">
                     <table class="table">
-                        <!-- head -->
                         <thead>
                             <tr>
-                                <th></th>
-                                <th>Name</th>
-                                <th>Job</th>
-                                <th>Favorite Color</th>
+                                <th>No</th>
+                                <th>Kode Transaksi</th>
+                                <th>User</th>
+                                <th>Produk</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- row 1 -->
+                            @forelse($recentPayments as $index => $payment)
+                            <tr class="hover:bg-base-200">
+                                <th>{{ $index + 1 }}</th>
+                                <td>{{ $payment->transaction_code }}</td>
+                                <td>{{ $payment->user->full_name }}</td>
+                                <td>{{ $payment->product->name_product }}</td>
+                                <td>Rp{{ number_format($payment->total_payment, 0, ',', '.') }}</td>
+                                <td>
+                                    @php
+                                        $statusClass = match($payment->status) {
+                                            'active' => 'badge-success',
+                                            'pending_payment' => 'badge-warning',
+                                            'pending_confirm' => 'badge-info',
+                                            'rejected' => 'badge-error',
+                                            default => 'badge-ghost'
+                                        };
+                                    @endphp
+                                    <span class="badge {{ $statusClass }}">{{ ucfirst(str_replace('_', ' ', $payment->status)) }}</span>
+                                </td>
+                                <td>{{ $payment->created_at->format('d M Y') }}</td>
+                            </tr>
+                            @empty
                             <tr>
-                                <th>1</th>
-                                <td>Cy Ganderton</td>
-                                <td>Quality Control Specialist</td>
-                                <td>Blue</td>
+                                <td colspan="7" class="text-center text-gray-500">Belum ada pembayaran</td>
                             </tr>
-                            <!-- row 2 -->
-                            <tr class="hover:bg-base-300">
-                                <th>2</th>
-                                <td>Hart Hagerty</td>
-                                <td>Desktop Support Technician</td>
-                                <td>Purple</td>
-                            </tr>
-                            <!-- row 3 -->
-                            <tr>
-                                <th>3</th>
-                                <td>Brice Swyre</td>
-                                <td>Tax Accountant</td>
-                                <td>Red</td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -375,8 +265,25 @@
     <div class="grid grid-cols-1 gap-4 mt-4">
         <div class="card bg-base-100 border border-base-300">
             <div class="card-body">
-                <h2 class="card-title">Peringatan & Pemberitahuan Sistem (Log)</h2>
-                <p class="text-base-content/60">This section spans the full width of the dashboard.</p>
+                <h2 class="card-title">Peringatan & Pemberitahuan Sistem</h2>
+                <div class="space-y-2">
+                    <div class="alert alert-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span>Total {{ $totalMembers }} member terdaftar dalam sistem</span>
+                    </div>
+                    @if($pendingInvoices > 0)
+                    <div class="alert alert-warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                        <span>{{ $pendingInvoices }} faktur menunggu pembayaran atau konfirmasi</span>
+                    </div>
+                    @endif
+                    @if($activeSubscriptions > 0)
+                    <div class="alert alert-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span>{{ $activeSubscriptions }} langganan aktif sedang berjalan</span>
+                    </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
@@ -387,16 +294,20 @@
                 type: 'line'
             },
             series: [{
-                name: 'sales',
-                data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+                name: 'Pendapatan',
+                data: [{{ $totalRevenue > 0 ? $totalRevenue/10000 : 30 }}, 40, 35, 50, 49, 60, 70, 91, {{ $totalRevenue > 0 ? $totalRevenue/8000 : 125 }}]
             }],
             xaxis: {
-                categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep']
+            },
+            yaxis: {
+                title: {
+                    text: 'Rupiah (x1000)'
+                }
             }
         }
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
-
         chart.render();
     </script>
 </div>

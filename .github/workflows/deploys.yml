@@ -23,7 +23,7 @@ jobs:
         script: |
           cd htdocs/hosting.kotaciamis.com/billing/ || exit 1
           eval $(ssh-agent -s)
-          ssh-add ${{ secrets.SERVER_USER }}
+          ssh-add ${{ secrets.SSH_PRIVATE_KEY }}
           git pull origin main
           composer install --no-interaction --prefer-dist --optimize-autoloader
           php artisan migrate --force

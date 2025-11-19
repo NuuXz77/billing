@@ -18,7 +18,7 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Deploy to server via SSH
+    - name: Deploy to server via SSHS
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
           cd /www/wwwroot/web-tms.icikiwir.site/compro_website || exit 1

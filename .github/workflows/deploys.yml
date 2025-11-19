@@ -27,5 +27,7 @@ jobs:
           php artisan migrate --force
           php artisan optimize:clear
           npm install
+          php artisan livewire:publish --config
+          php artisan livewire:publish --assets
           npm run build
         "

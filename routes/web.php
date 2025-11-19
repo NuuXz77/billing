@@ -7,12 +7,9 @@ use Livewire\Volt\Volt;
 //Route bebas tanpa middleware
 Route::post('/logout', [App\Http\Controllers\Auth\AuthController::class, 'logout'])->name('logout');
 
-Route::get('/', function () {
-    return view('frontend.index');
-})->name('index');
-
-//Route untuk guest
-Route::middleware('guest')->group(function () {
+// Route::get('/', function () {
+//     return view('frontend.index');
+// })->name('index');
 
     //view untuk landing page
     Route::get('/', function () {
@@ -43,12 +40,6 @@ Route::middleware('guest')->group(function () {
         return view('frontend.landing_page', ['showCart' => true]);
     })->name('cart');
     
-    // Authentication Routes
-    Route::get('/auth/login', [App\Http\Controllers\Auth\AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('/auth/login', [App\Http\Controllers\Auth\AuthController::class, 'login'])->name('login.post');
-    Route::get('/auth/register', [App\Http\Controllers\Auth\AuthController::class, 'showRegisterForm'])->name('register');
-    Route::post('/auth/register', [App\Http\Controllers\Auth\AuthController::class, 'register'])->name('register.post');
-    
     Route::get('/privacy-policy', function () {
         return view('frontend.landing_page', ['showPrivacyPolicy' => true]);
     })->name('privacy-policy');
@@ -57,6 +48,15 @@ Route::middleware('guest')->group(function () {
         return view('frontend.landing_page', ['showTermsAndConditions' => true]);
     })->name('terms-and-conditions');
     
+
+//Route untuk guest
+
+Route::middleware('guest')->group(function () {
+    // Authentication Routes
+    Route::get('/auth/login', [App\Http\Controllers\Auth\AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/auth/login', [App\Http\Controllers\Auth\AuthController::class, 'login'])->name('login.post');
+    Route::get('/auth/register', [App\Http\Controllers\Auth\AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/auth/register', [App\Http\Controllers\Auth\AuthController::class, 'register'])->name('register.post');
 });
 
 //ingin menambahkan file route lain

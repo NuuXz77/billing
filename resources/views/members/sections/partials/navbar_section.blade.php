@@ -39,13 +39,14 @@
                                 </svg>
                                 My Subscriptions
                             </a>
+                            <!-- Manage hosting
                             <a wire:navigate href="{{ route('hosting.manage') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
                                 Manage Hosting
-                            </a>
+                            </a> -->
                         </div>
                     </div>
                 </div>
@@ -132,7 +133,17 @@
                 <div class="relative group ml-2">
                     <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
                         <div class="w-8 h-8 bg-gradient-to-r from-blue-600 to-blue-800 rounded-full flex items-center justify-center text-white font-semibold text-xs">
-                            JD
+                            @php
+                                $fullName = auth()->user()->full_name ?? auth()->user()->username ?? 'User';
+                                $nameParts = explode(' ', trim($fullName));
+                                $initials = '';
+                                if (count($nameParts) >= 2) {
+                                    $initials = strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
+                                } else {
+                                    $initials = strtoupper(substr($nameParts[0], 0, 2));
+                                }
+                            @endphp
+                            {{ $initials }}
                         </div>
                         <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -150,13 +161,14 @@
                                 </svg>
                                 My Profile
                             </a>
+                            <!-- settings
                             <a wire:navigate href="{{ route('members.settings') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
                                 Settings
-                            </a>
+                            </a> -->
                             <hr class="my-2">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -193,30 +205,40 @@
                 <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase">Hosting</p>
                 <a wire:navigate href="{{ route('hosting.plans') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">Hosting Plans</a>
                 <a wire:navigate href="{{ route('hosting.subscriptions') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">My Subscriptions</a>
+                <!-- Manage Hosting dinonaktifkan
                 <a wire:navigate href="{{ route('hosting.manage') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">Manage Hosting</a>
+                -->
             </div>
 
+            <!-- Domains dinonaktifkan
             <div class="space-y-1">
                 <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase">Domains</p>
                 <a wire:navigate href="{{ route('domains.subdomains') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">My Subdomains</a>
                 <a wire:navigate href="{{ route('domains.dns') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">DNS Settings</a>
             </div>
+            -->
 
             <div class="space-y-1">
                 <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase">Billing</p>
+                <!-- Invoices dinonaktifkan
                 <a wire:navigate href="{{ route('billing.invoices') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">Invoices</a>
+                -->
                 <a wire:navigate href="{{ route('billing.history') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">Transaction History</a>
             </div>
 
             <div class="space-y-1">
                 <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase">Support</p>
+                <!-- Tickets dinonaktifkan
                 <a wire:navigate href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">Tickets</a>
-                <a wire:navigate href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">Live Chat</a>
+                -->
+                <a wire:navigate href="{{ route('support.live_chat') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">Live Chat</a>
             </div>
 
             <div class="space-y-1 pt-4 border-t border-gray-200">
                 <a wire:navigate href="{{ route('members.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">My Profile</a>
+                <!-- Settings dinonaktifkan
                 <a wire:navigate href="{{ route('members.settings') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">Settings</a>
+                -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg w-full text-left">Logout</button>

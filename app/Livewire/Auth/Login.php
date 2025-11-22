@@ -31,9 +31,17 @@ class Login extends Component
 
     public function login()
     {
-        $this->validate();
+        // Validasi dengan try-catch untuk handle validation error
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Set toast error untuk validation
+            $this->toastMessage = 'Periksa kembali email dan password Anda!';
+            $this->toastType = 'error';
+            throw $e; // Re-throw untuk menampilkan error di form
+        }
 
-        if (Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
+        if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             session()->regenerate();
 
             $user = Auth::user();
@@ -54,10 +62,10 @@ class Login extends Component
             }
         }
 
-        // Set toast error
+        // Set toast error untuk wrong credentials
         $this->toastMessage = 'Email atau password salah!';
         $this->toastType = 'error';
-        $this->addError('email', 'Email atau password salah.');
+        $this->addError('email', 'Kredensial tidak valid.');
     }
 
     public function render()

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login - Masuk ke Akun Anda</title>
     
     {{-- Favicon --}}
@@ -10,8 +11,13 @@
     <link rel="alternate icon" href="{{ asset('img/logo/Hoci_Logo.svg') }}">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    @livewireStyles
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-gray-100 h-full overflow-hidden">
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 h-full overflow-hidden" x-data="loginHandler()">
+    
+    {{-- Include Modal Notification --}}
+    @include('auth.partials.modallogin')
+    
     <!-- Background decoration -->
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-20 left-10 w-32 h-32 bg-blue-300 rounded-full animate-pulse"></div>
@@ -29,20 +35,8 @@
                     <p class="text-gray-500 text-xs">Masuk ke akun Anda untuk melanjutkan</p>
                 </div>
 
-                <!-- Toast Notification -->
-                @if(session('success'))
-                    <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg text-sm">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if(session('error'))
-                    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
                 <!-- Login Form -->
-                <form method="POST" action="{{ route('login.post') }}" class="space-y-4">
+                <form @submit.prevent="handleLogin" class="space-y-4">
                     @csrf
                     
                     <!-- Email Input -->
@@ -60,9 +54,6 @@
                             autofocus
                             required
                         >
-                        @error('email')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Password Input -->
@@ -78,9 +69,6 @@
                             placeholder="********"
                             required
                         >
-                        @error('password')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <!-- Remember Me & Forgot Password -->
@@ -165,5 +153,106 @@
     </div>
     
     @livewireScripts
+    
+    {{-- Alpine.js Login Handler --}}
+    <script>
+        function loginHandler() {
+            return {
+                showModal: false,
+                modalType: '',
+                modalMessage: '',
+                validationErrors: [],
+                
+                handleLogin(event) {
+                    const form = event.target;
+                    const formData = new FormData(form);
+                    
+                    // Reset modal
+                    this.showModal = false;
+                    this.validationErrors = [];
+                    
+                    // Ensure CSRF token in FormData (dari hidden input @csrf)
+                    if (!formData.has('_token')) {
+                        const csrfInput = form.querySelector('input[name="_token"]');
+                        if (csrfInput) {
+                            formData.append('_token', csrfInput.value);
+                        }
+                    }
+                    
+                    // Add flag untuk force JSON response
+                    formData.append('ajax', '1');
+                    
+                    // Send AJAX request
+                    fetch('{{ route("login.ajax") }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(async response => {
+                        // Check if response is JSON
+                        const contentType = response.headers.get("content-type");
+                        
+                        console.log('Response status:', response.status);
+                        console.log('Content-Type:', contentType);
+                        
+                        if (!contentType || !contentType.includes("application/json")) {
+                            // Not JSON - probably HTML error page
+                            const htmlText = await response.text();
+                            console.error('HTML Response:', htmlText.substring(0, 500));
+                            
+                            if (response.status === 419) {
+                                throw new Error('CSRF token expired. Refresh halaman dan coba lagi.');
+                            }
+                            throw new Error('Server error. Periksa koneksi Anda.');
+                        }
+                        
+                        const data = await response.json();
+                        
+                        if (!response.ok) {
+                            // HTTP error status (401, 422, etc)
+                            return { success: false, message: data.message || 'Login gagal!', errors: data.errors || {} };
+                        }
+                        
+                        return data;
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            // Success
+                            this.modalType = 'success';
+                            this.modalMessage = data.message;
+                            this.showModal = true;
+                            
+                            // Redirect after 2 seconds
+                            setTimeout(() => {
+                                window.location.href = data.redirect;
+                            }, 2000);
+                        } else {
+                            // Error
+                            this.modalType = 'error';
+                            this.modalMessage = data.message;
+                            this.validationErrors = data.errors ? Object.values(data.errors).flat() : [];
+                            this.showModal = true;
+                            
+                            // Auto close after 5 seconds
+                            setTimeout(() => {
+                                this.showModal = false;
+                            }, 5000);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.modalType = 'error';
+                        this.modalMessage = 'Terjadi kesalahan. Silakan coba lagi.';
+                        this.showModal = true;
+                    });
+                }
+            }
+        }
+    </script>
 </body>
 </html>

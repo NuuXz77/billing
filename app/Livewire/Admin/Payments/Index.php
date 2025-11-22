@@ -206,9 +206,6 @@ class Index extends Component
     {
         $payments = Payments::query()
             ->withCount('transactions')
-            ->with(['transactions' => function ($query) {
-                $query->latest()->take(1);
-            }])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('payment_method', 'like', '%' . $this->search . '%')
@@ -226,9 +223,12 @@ class Index extends Component
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 
-        // Add last transaction date for each payment
+        // Add last transaction date for each payment using a separate query
         $payments->getCollection()->transform(function ($payment) {
-            $payment->last_transaction_date = $payment->transactions->first()?->created_at;
+            $lastTransaction = \App\Models\Transaction::where('payment_id', $payment->id)
+                ->latest('created_at')
+                ->first(['created_at']);
+            $payment->last_transaction_date = $lastTransaction?->created_at;
             return $payment;
         });
 

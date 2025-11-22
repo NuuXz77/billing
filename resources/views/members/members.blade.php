@@ -45,13 +45,15 @@
     @elseif($section === 'invoices')
         @include('members.sections.invoices_section')
     @elseif($section === 'transaction-history')
-        @include('members.sections.transaction_history_section')
+        @include('members.sections.transaction_history_section', compact('transactions', 'stats'))
     @elseif($section === 'my-profile')
         @include('members.sections.my_profile_section')
     @elseif($section === 'account-settings')
         @include('members.sections.account_settings_section')
     @elseif($section === 'live-chat')
         @include('members.sections.live_chat_section')
+    @elseif($section === 'cart')
+        @include('members.sections.partials.cart_section')
     @endif
     
     

@@ -18,10 +18,17 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            UserSeeder::class,
-            ProductSeeder::class,
-            PaymentSeeder::class,
-            TransactionSeeder::class,
+            UserSeeder::class,          // Buat admin & member dummy
+            PaymentSeeder::class,       // Buat payment methods
+            ProductSeeder::class,       // Buat products
+            TransactionSeeder::class,   // Buat transactions (dengan auto-numbering)
         ]);
+        
+        $this->command->info('✅ Database seeding completed!');
+        $this->command->info('📊 Summary:');
+        $this->command->info('   - Users: Admin & Members created');
+        $this->command->info('   - Payments: Payment methods created');
+        $this->command->info('   - Products: Products created');
+        $this->command->info('   - Transactions: Auto-numbered transactions created');
     }
 }

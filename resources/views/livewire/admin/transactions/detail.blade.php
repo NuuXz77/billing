@@ -532,7 +532,7 @@
                     </form>
                     <h3 class="text-lg font-bold mb-4">Bukti Pembayaran - {{ $transaction->transaction_code }}</h3>
                     <div class="text-center">
-                        <img src="{{ asset('storage/payment-proofs/' . $transaction->payment_proof) }}" 
+                        <img src="{{ asset('storage/' . $transaction->payment_proof) }}" 
                             alt="Bukti Pembayaran" class="max-w-full h-auto rounded-lg shadow-lg">
                     </div>
                 </div>

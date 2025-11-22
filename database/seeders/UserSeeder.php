@@ -39,10 +39,10 @@ class UserSeeder extends Seeder
         User::create([
             'user_code' => 'MBR-' . strtoupper(Str::random(6)),
             'role' => 'member',
-            'email' => 'wisnusatriyadi92@gmail.com',
-            'full_name' => 'Member User',
-            'username' => 'memberaja',
-            'password' => Hash::make('hohohoho'),
+            'email' => 'membergacor@gmail.com',
+            'full_name' => 'GusCor',
+            'username' => 'mangguscor',
+            'password' => Hash::make('anjirgacor22'),
             'status' => 'active',
             'last_active' => now(),
         ]);

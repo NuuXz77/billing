@@ -228,9 +228,6 @@ class Index extends Component
     {
         $users = User::query()
             ->withCount('transactions')
-            ->with(['transactions' => function ($query) {
-                $query->latest()->take(1);
-            }])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('full_name', 'like', '%' . $this->search . '%')
@@ -245,12 +242,16 @@ class Index extends Component
             ->when($this->statusFilter, function ($query) {
                 $query->where('status', $this->statusFilter);
             })
+            ->orderByRaw("CASE WHEN role = 'admin' THEN 0 ELSE 1 END")
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 
-        // Add last transaction date for each user
+        // Add last transaction date for each user using a separate query
         $users->getCollection()->transform(function ($user) {
-            $user->last_transaction_date = $user->transactions->first()?->created_at;
+            $lastTransaction = \App\Models\Transaction::where('user_id', $user->id)
+                ->latest('created_at')
+                ->first(['created_at']);
+            $user->last_transaction_date = $lastTransaction?->created_at;
             return $user;
         });
 

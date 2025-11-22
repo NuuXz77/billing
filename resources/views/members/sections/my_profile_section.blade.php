@@ -18,7 +18,17 @@
                 <div class="flex flex-col md:flex-row md:items-end gap-6 -mt-16">
                     <div class="relative">
                         <div class="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-gray-200 flex items-center justify-center">
-                            <span class="text-4xl font-bold text-gray-900">JD</span>
+                            @php
+                                $fullName = auth()->user()->full_name ?? auth()->user()->username ?? 'User';
+                                $nameParts = explode(' ', trim($fullName));
+                                $initials = '';
+                                if (count($nameParts) >= 2) {
+                                    $initials = strtoupper(substr($nameParts[0], 0, 1) . substr($nameParts[1], 0, 1));
+                                } else {
+                                    $initials = strtoupper(substr($nameParts[0], 0, 2));
+                                }
+                            @endphp
+                            <span class="text-4xl font-bold text-gray-900">{{ $initials }}</span>
                         </div>
                         <label for="photo-upload" class="absolute bottom-0 right-0 bg-gray-900 hover:bg-gray-800 text-white p-2 rounded-full shadow-lg cursor-pointer transition-all">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,12 +48,13 @@
                                 </svg>
                                 Verified Account
                             </span>
+                            <!-- 2fa
                             <span class="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 text-sm font-semibold rounded-lg">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                                 </svg>
                                 2FA Enabled
-                            </span>
+                            </span> -->
                         </div>
                     </div>
                 </div>
@@ -55,171 +66,16 @@
             {{-- Left Column --}}
             <div class="space-y-8">
                 {{-- Personal Information Card --}}
-                <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="font-['Source_Sans_Pro'] text-2xl font-bold text-gray-900">Personal Information</h2>
-            </div>
-            <div class="p-8">
-                <form class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {{-- Full Name --}}
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Full Name <span class="text-red-500">*</span>
-                            </label>
-                            <input type="text" value="{{ auth()->user()->full_name ?? auth()->user()->username }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                        </div>
-
-                        {{-- Email --}}
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Email Address <span class="text-red-500">*</span>
-                            </label>
-                            <div class="relative">
-                                <input type="email" value="{{ auth()->user()->email }}" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                                <div class="absolute right-3 top-1/2 -translate-y-1/2">
-                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- Phone --}}
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Phone Number
-                            </label>
-                            <input type="tel" value="+62 812 3456 7890" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                        </div>
-
-                        {{-- Date of Birth --}}
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Date of Birth
-                            </label>
-                            <input type="date" value="1995-06-15" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                        </div>
-
-                        {{-- Country --}}
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Country
-                            </label>
-                            <select class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                                <option>Indonesia</option>
-                                <option>United States</option>
-                                <option>United Kingdom</option>
-                                <option>Singapore</option>
-                            </select>
-                        </div>
-
-                        {{-- City --}}
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                City
-                            </label>
-                            <input type="text" value="Jakarta" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                        </div>
-                    </div>
-
-                    {{-- Address --}}
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            Address
-                        </label>
-                        <textarea rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">Jl. Sudirman No. 123, Jakarta Pusat</textarea>
-                    </div>
-
-                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
-                        <button type="button" class="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all font-semibold">
-                            Cancel
-                        </button>
-                        <button type="submit" class="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl transition-all font-semibold">
-                            Save Changes
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        {{-- Change Password Card --}}
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="font-['Source_Sans_Pro'] text-2xl font-bold text-gray-900">Change Password</h2>
-            </div>
-            <div class="p-8">
-                <form class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            Current Password <span class="text-red-500">*</span>
-                        </label>
-                        <input type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                New Password <span class="text-red-500">*</span>
-                            </label>
-                            <input type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                Confirm New Password <span class="text-red-500">*</span>
-                            </label>
-                            <input type="password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all">
-                        </div>
-                    </div>
-
-                    {{-- Password Requirements --}}
-                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
-                        <p class="text-sm font-semibold text-gray-700 mb-2">Password must contain:</p>
-                        <ul class="space-y-1 text-sm text-gray-600">
-                            <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                At least 8 characters
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                One uppercase letter
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                One number
-                            </li>
-                            <li class="flex items-center gap-2">
-                                <svg class="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                One special character
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-200">
-                        <button type="button" class="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all font-semibold">
-                            Cancel
-                        </button>
-                        <button type="submit" class="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl transition-all font-semibold">
-                            Update Password
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                @include('members.sections.partials.edit_profile_section')
             </div>
 
-            {{-- Right Column --}}
+             <!-- Right Column -->
             <div class="space-y-8">
-                {{-- Two-Factor Authentication Card --}}
+
+            {{-- Change Password Card --}}
+                @include('members.sections.partials.edit_password_section')
+
+                <!-- Two-Factor Authentication Card
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
@@ -269,9 +125,9 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div>-->
 
-                {{-- Active Sessions Card --}}
+                <!-- Active Sessions Card
                 <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
             <div class="p-6 border-b border-gray-200">
                 <h2 class="font-['Source_Sans_Pro'] text-2xl font-bold text-gray-900">Active Sessions</h2>
@@ -368,8 +224,8 @@
                     Logout All Other Sessions
                 </button>
             </div>
-        </div>
-            </div>
+        </div> -->
+            </div> 
         </div>
     </div>
 </section>

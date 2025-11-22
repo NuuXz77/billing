@@ -123,11 +123,14 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         $user = Auth::user();
-        $user->status = 'inactive';
-        $user->last_active = now();
-        $user->save();
+        
+        if ($user) {
+            $user->status = 'inactive';
+            $user->last_active = now();
+            $user->save();
+        }
+        
         Auth::logout();
-        // tambah last active
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -233,9 +233,6 @@ class Index extends Component
     {
         $products = Products::query()
             ->withCount('transactions')
-            ->with(['transactions' => function ($query) {
-                $query->latest()->take(1);
-            }])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('name_product', 'like', '%' . $this->search . '%')
@@ -265,9 +262,12 @@ class Index extends Component
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 
-        // Add last sale date for each product
+        // Add last sale date for each product using a separate query
         $products->getCollection()->transform(function ($product) {
-            $product->last_sale_date = $product->transactions->first()?->created_at;
+            $lastTransaction = \App\Models\Transaction::where('product_id', $product->id)
+                ->latest('created_at')
+                ->first(['created_at']);
+            $product->last_sale_date = $lastTransaction?->created_at;
             return $product;
         });
 

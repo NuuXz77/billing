@@ -1,4 +1,39 @@
 <div class="min-h-screen bg-base-200">
+    {{-- Toast Notification --}}
+    @if ($toastMessage)
+        <div class="toast toast-top toast-end z-50" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)"
+            x-transition>
+            @if ($toastType === 'success')
+                <div class="alert alert-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{{ $toastMessage }}</span>
+                </div>
+            @elseif ($toastType === 'error')
+                <div class="alert alert-error">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{{ $toastMessage }}</span>
+                </div>
+            @else
+                <div class="alert alert-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{{ $toastMessage }}</span>
+                </div>
+            @endif
+        </div>
+    @endif
+
     {{-- Breadcrumbs --}}
     <div class="flex flex-wrap justify-between items-center mb-6 gap-4">
         <div>
@@ -546,28 +581,14 @@
                         </svg>
                         Tolak Transaksi
                     </button>
-                </div>
-            </div>
-            @endif
-
-            {{-- Send Account Server Card - Only for active transactions --}}
-            @if($transaction->status === 'active' && $transaction->subdomain_web && $transaction->subdomain_server)
-            <div class="bg-base-100 rounded-lg p-4 shadow-sm border border-base-300">
-                <div class="flex items-center mb-3">
-                    <div class="p-2 bg-success/10 rounded-lg mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <h2 class="font-bold text-base-content">Kirim Akun Server</h2>
-                </div>
-                <div class="space-y-2">
-                    <p class="text-sm text-base-content/70 mb-3">Kirim informasi akun server dan subdomain ke pelanggan melalui email</p>
-                    <button wire:click="openSendAccountModal({{ $transaction->id }})" class="btn btn-success btn-sm w-full">
+                    
+                    {{-- Tombol test email untuk debugging --}}
+                    <div class="divider divider-sm text-xs">DEBUGGING</div>
+                    <button wire:click="testEmail" class="btn btn-outline btn-warning btn-sm btn-block">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        Kirim Akun Server
+                        🧪 Test Email ke {{ $transaction->user->email }}
                     </button>
                 </div>
             </div>
@@ -579,5 +600,4 @@
     @include('livewire.admin.transactions.modals.confirm-subdomain')
     @include('livewire.admin.transactions.modals.confirm-admin')
     @include('livewire.admin.transactions.modals.reject')
-    @include('livewire.admin.transactions.modals.send-akun-server')
 </div>

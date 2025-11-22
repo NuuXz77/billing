@@ -2,7 +2,7 @@
 <section id="live-chat" class="fixed inset-0 bg-gray-50 flex" style="padding-top: 80px;">
     
     {{-- Include Sidebar --}}
-    @include('users.sections.partials.sidebar_chat_section')
+    @include('members.sections.partials.sidebar_chat_section')
     
     {{-- Chat Window --}}
     <div class="flex-1 flex flex-col" style="margin-left: 260px;">
@@ -103,7 +103,7 @@
 @include('frontend.sections.partials.modalinformasitextkosong')
 
 {{-- Include Chat History Modals (Rename & Delete) --}}
-@include('users.sections.partials.ditlet_history_chat_section')
+@include('members.sections.partials.ditlet_history_chat_section')
 
 {{-- JavaScript for Chat Functionality --}}
 <script>

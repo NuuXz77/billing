@@ -1,24 +1,6 @@
 <div class="min-h-screen flex items-center justify-center bg-base-200">
-    {{-- Toast Notification --}}
-    @if($toastMessage)
-        <div class="toast toast-top toast-end z-50" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" x-transition>
-            @if($toastType === 'success')
-                <div class="alert alert-success">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{{ $toastMessage }}</span>
-                </div>
-            @else
-                <div class="alert alert-error">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span>{{ $toastMessage }}</span>
-                </div>
-            @endif
-        </div>
-    @endif
+    {{-- Include Modal Notification --}}
+    @include('auth.partials.modallogin')
 
     <div class="card w-full max-w-md bg-base-100 shadow-xl">
         <div class="card-body">
@@ -35,11 +17,6 @@
                            placeholder="your@email.com" 
                            class="input input-bordered w-full @error('email') input-error @enderror" 
                            autofocus>
-                    @error('email') 
-                        <label class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </label>
-                    @enderror
                 </div>
 
                 {{-- Password --}}
@@ -51,11 +28,6 @@
                            wire:model="password" 
                            placeholder="••••••••" 
                            class="input input-bordered w-full @error('password') input-error @enderror">
-                    @error('password') 
-                        <label class="label">
-                            <span class="label-text-alt text-error">{{ $message }}</span>
-                        </label>
-                    @enderror
                 </div>
 
                 {{-- Remember Me --}}

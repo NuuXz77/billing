@@ -14,13 +14,17 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('transaction_code')->unique();
+            $table->enum('transaction_type', ['payment', 'renewal', 'purchase', 'topup'])->default('purchase'); // Jenis transaksi
+            $table->text('description')->nullable(); // Deskripsi transaksi
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->integer('user_transaction_number')->nullable(); // Nomor transaksi per user (1,2,3,... - independent per user)
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade');
             $table->enum('status', ['active', 'pending_payment', 'pending_confirm', 'expired', 'canceled', 'refunded', 'rejected'])->default('pending_payment');
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->decimal('total_payment', 10, 2);
+            $table->string('payment_method')->nullable(); // Metode pembayaran (dari payment_bank)
             $table->string('subdomain_web')->nullable();
             $table->string('subdomain_server')->nullable();
             $table->enum('billing_cycle', ['monthly', 'yearly', 'custom'])->default('monthly');

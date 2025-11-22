@@ -225,8 +225,8 @@
     </div>
 
     {{-- Modern Table Card --}}
-    <div class="card bg-base-100 border border-base-300" style="overflow: visible;">
-        <div class="card-body" style="overflow: visible;">
+    <div class="card bg-base-100 border border-base-300">
+        <div class="card-body">
             {{-- Header --}}
             <div class="flex items-center justify-between mb-6">
                 <div>
@@ -437,8 +437,8 @@
             </div>
 
             {{-- Modern Table --}}
-            <div class="overflow-x-auto card p-5 bg-base-100 border border-base-300" style="overflow: visible;">
-                <table class="table table-hover w-full table-compact" style="overflow: visible;">
+            <div class="overflow-x-auto card p-5 bg-base-100 border border-base-300">
+                <table class="table table-hover w-full overflow-auto">
                     <thead>
                         <tr class="bg-base-200">
                             <th class="font-semibold text-center" style="width: 50px;">#</th>
@@ -455,7 +455,7 @@
                         @forelse($transactions as $index => $transaction)
                             <tr class="hover transition-colors hover:bg-base-200">
                                 {{-- Number --}}
-                                <td class="font-mono text-sm text-center font-semibold">
+                                <td class="font-mono text-sm">
                                     {{ ($transactions->currentPage() - 1) * $transactions->perPage() + $index + 1 }}
                                 </td>
 
@@ -475,7 +475,7 @@
                                 </td>
 
                                 {{-- Customer Info --}}
-                                <td class="py-2">
+                                <td>
                                     <div class="flex items-center gap-2">
                                         <div class="avatar placeholder">
                                             <div class="bg-neutral text-neutral-content w-8 h-8 rounded-full">
@@ -483,14 +483,14 @@
                                             </div>
                                         </div>
                                         <div class="text-left">
-                                            <div class="font-semibold text-xs truncate" style="max-width: 120px;">{{ $transaction->user->full_name }}</div>
-                                            <div class="text-xs text-base-content/60 truncate" style="max-width: 120px;">{{ $transaction->user->email }}</div>
+                                            <div class="font-semibold text-xs truncate">{{ $transaction->user->full_name }}</div>
+                                            <div class="text-xs text-base-content/60 truncate">{{ $transaction->user->email }}</div>
                                         </div>
                                     </div>
                                 </td>
 
                                 {{-- Product Info --}}
-                                <td class="text-center py-2">
+                                <td class="text-center">
                                     <div class="flex flex-col gap-0.5 items-center">
                                         <div class="font-semibold text-xs truncate" style="max-width: 140px;" title="{{ $transaction->product->name_product }}">
                                             {{ $transaction->product->name_product }}
@@ -502,7 +502,7 @@
                                 </td>
 
                                 {{-- Payment Info --}}
-                                <td class="text-center py-2">
+                                <td class="text-center">
                                     <div class="flex flex-col gap-0.5 items-center">
                                         <div class="font-semibold text-xs">{{ $transaction->payment->payment_method }}</div>
                                         <div class="text-xs text-base-content/60">{{ $transaction->payment->payment_bank }}</div>
@@ -510,55 +510,57 @@
                                 </td>
 
                                 {{-- Total --}}
-                                <td class="text-center py-2">
+                                <td class="text-center">
                                     <div class="font-bold text-xs text-primary">
                                         Rp {{ number_format($transaction->total_payment / 1000, 0) }}K
                                     </div>
                                 </td>
 
                                 {{-- Status --}}
-                                <td class="text-center py-2">
+                                <td>
                                     @php
                                         $statusConfig = [
-                                            'pending_payment' => ['class' => 'badge-warning', 'text' => 'Pending'],
-                                            'pending_confirm' => ['class' => 'badge-info', 'text' => 'Confirm'],
-                                            'active' => ['class' => 'badge-success', 'text' => 'Active'],
-                                            'expired' => ['class' => 'badge-error', 'text' => 'Expired'],
-                                            'canceled' => ['class' => 'badge-neutral', 'text' => 'Canceled'],
-                                            'rejected' => ['class' => 'badge-error', 'text' => 'Rejected'],
-                                            'refunded' => ['class' => 'badge-accent', 'text' => 'Refunded']
+                                            'pending_payment' => ['class' => 'badge-soft badge-sm badge-warning', 'text' => 'Pending Pembayaran'],
+                                            'pending_confirm' => ['class' => 'badge-soft badge-sm badge-info', 'text' => 'Pending Konfirmasi'],
+                                            'active' => ['class' => 'badge-soft badge-sm badge-success', 'text' => 'Aktif'],
+                                            'expired' => ['class' => 'badge-soft badge-sm badge-error', 'text' => 'Kedaluwarsa'],
+                                            'canceled' => ['class' => 'badge-soft badge-sm badge-neutral', 'text' => 'Dibatalkan'],
+                                            'rejected' => ['class' => 'badge-soft badge-sm badge-error', 'text' => 'Ditolak'],
+                                            'refunded' => ['class' => 'badge-soft badge-sm badge-accent', 'text' => 'Dikembalikan']
                                         ];
-                                        $status = $statusConfig[$transaction->status] ?? ['class' => 'badge-ghost', 'text' => ucfirst($transaction->status)];
+                                        $status = $statusConfig[$transaction->status] ?? ['class' => 'badge-soft badge-ghost badge-sm', 'text' => ucfirst($transaction->status)];
                                     @endphp
-                                    <div class="badge {{ $status['class'] }} badge-xs gap-1 font-semibold">
+                                    <div class="badge {{ $status['class'] }}">
                                         @if($transaction->status === 'active')
-                                            <div class="status status-success"></div>
+                                            <div class="status status-success mr-1"></div>
                                         @elseif($transaction->status === 'pending_confirm')
-                                            <div class="status status-info"></div>
+                                            <div class="status status-info mr-1"></div>
                                         @elseif($transaction->status === 'pending_payment')
-                                            <div class="status status-warning"></div>
+                                            <div class="status status-warning mr-1"></div>
                                         @else
-                                            <div class="status status-error"></div>
+                                            <div class="status status-error mr-1"></div>
                                         @endif
                                         {{ $status['text'] }}
                                     </div>
                                 </td>
 
                                 {{-- Actions Dropdown --}}
-                                <td class="text-center">
-                                    @php
-                                        $totalTransactions = $transactions->count();
-                                        $currentIndex = $loop->index;
-                                        $isLastRows = $totalTransactions - $currentIndex <= 2;
-                                    @endphp
-                                    <details class="dropdown dropdown-end {{ $isLastRows ? 'dropdown-top' : 'dropdown-bottom' }}">
-                                        <summary class="btn btn-ghost btn-circle btn-sm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                                            </svg>
-                                        </summary>
-                                        <ul class="menu dropdown-content rounded-box w-52 p-2 shadow-xl bg-base-100 border border-base-300 z-[9999]">
+                                <td>
+                                    <div class="flex justify-center">
+                                        @php
+                                            $totalTransactions = $transactions->count();
+                                            $currentIndex = $loop->index;
+                                            $isLastRows = $totalTransactions - $currentIndex <= 3;
+                                        @endphp
+                                        <div class="dropdown dropdown-end {{ $isLastRows ? 'dropdown-top' : '' }}">
+                                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                                </svg>
+                                            </div>
+                                            <ul tabindex="0"
+                                                class="dropdown-content menu rounded-box z-50 w-52 p-2 shadow-xl bg-base-100 border border-base-300 {{ $isLastRows ? 'mb-2' : 'mt-2' }}">
                                                 {{-- Detail Button - Always Available --}}
                                                 <li>
                                                     <a href="{{ route('admin.transactions.detail', $transaction->id) }}" wire:navigate
@@ -609,7 +611,8 @@
                                                     </li>
                                                 @endif
                                             </ul>
-                                        </details>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         @empty

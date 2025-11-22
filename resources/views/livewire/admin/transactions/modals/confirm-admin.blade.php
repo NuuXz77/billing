@@ -32,11 +32,11 @@
                 </div>
                 <div>
                     <span class="font-medium text-base-content/70">Pelanggan:</span>
-                    <p class="font-semibold">{{ $selectedTransaction->user->name }}</p>
+                    <p class="font-semibold">{{ $selectedTransaction->user->full_name }}</p>
                 </div>
                 <div>
                     <span class="font-medium text-base-content/70">Produk:</span>
-                    <p class="font-semibold">{{ $selectedTransaction->product->name }}</p>
+                    <p class="font-semibold">{{ $selectedTransaction->product->name_product }}</p>
                 </div>
                 <div>
                     <span class="font-medium text-base-content/70">Total:</span>
@@ -163,7 +163,7 @@
                     </svg>
                     Batal
                 </button>
-                <button type="submit" class="btn btn-success" wire:loading.attr="disabled">
+                <button type="submit" class="btn btn-success" wire:loading.attr="disabled" wire:click="confirmTransaction">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>

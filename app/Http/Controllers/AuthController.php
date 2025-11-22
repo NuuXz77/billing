@@ -86,7 +86,7 @@ class AuthController extends Controller
         }
         
         // Coba login dengan guard yang sesuai
-        if (Auth::guard($guard)->attempt($credentials, $request->filled('remember'))) {
+        if (Auth::guard($guard)->attempt($credentials)) {
             $request->session()->regenerate();
             
             $user = Auth::guard($guard)->user();

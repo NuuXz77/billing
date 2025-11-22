@@ -32,7 +32,7 @@
                 </div>
                 <div>
                     <span class="font-medium text-base-content/70">Pelanggan:</span>
-                    <p class="font-semibold">{{ $selectedTransaction->user->name }}</p>
+                    <p class="font-semibold">{{ $selectedTransaction->user->full_name }}</p>
                 </div>
                 <div>
                     <span class="font-medium text-base-content/70">Email:</span>
@@ -44,7 +44,7 @@
                 </div>
                 <div class="md:col-span-2">
                     <span class="font-medium text-base-content/70">Produk:</span>
-                    <p class="font-semibold">{{ $selectedTransaction->product->name }}</p>
+                    <p class="font-semibold">{{ $selectedTransaction->product->name_product }}</p>
                 </div>
             </div>
         </div>

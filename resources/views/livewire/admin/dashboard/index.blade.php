@@ -136,7 +136,7 @@
                                 <td>{{ $transaction->user->full_name }}</td>
                                 <td>{{ $transaction->product->name_product }}</td>
                                 <td>
-                                    <span class="badge badge-success">{{ ucfirst($transaction->status) }}</span>
+                                    <span class="badge badge-soft badge-success">{{ ucfirst($transaction->status) }}</span>
                                 </td>
                             </tr>
                             @empty
@@ -173,7 +173,7 @@
                                 <td>{{ $product->name_product }}</td>
                                 <td>Rp{{ number_format($product->price_monthly, 0, ',', '.') }}</td>
                                 <td>
-                                    <span class="badge badge-primary">{{ $product->transactions_count }} transaksi</span>
+                                    <span class="badge badge-soft badge-primary">{{ $product->transactions_count }} transaksi</span>
                                 </td>
                             </tr>
                             @empty
@@ -266,11 +266,11 @@
                                 <td>
                                     @php
                                         $statusClass = match($payment->status) {
-                                            'active' => 'badge-success',
-                                            'pending_payment' => 'badge-warning',
-                                            'pending_confirm' => 'badge-info',
-                                            'rejected' => 'badge-error',
-                                            default => 'badge-ghost'
+                                            'active' => 'badge-soft badge-success',
+                                            'pending_payment' => 'badge-soft badge-warning',
+                                            'pending_confirm' => 'badge-soft badge-info',
+                                            'rejected' => 'badge-soft badge-error',
+                                            default => 'badge-soft badge-ghost'
                                         };
                                     @endphp
                                     <span class="badge {{ $statusClass }}">{{ ucfirst(str_replace('_', ' ', $payment->status)) }}</span>

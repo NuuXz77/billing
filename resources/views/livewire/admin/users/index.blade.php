@@ -277,23 +277,23 @@
             </div>
 
             {{-- Modern Table --}}
-            <div class="overflow-x-auto card p-5 bg-base-100 border border-base-300 ">
+            <div class="overflow-x-auto card p-5 bg-base-100 border border-base-300">
                 <table class="table table-hover w-full">
                     <thead>
                         <tr class="bg-base-200">
-                            <th class="font-semibold">#</th>
-                            <th class="font-semibold">Pengguna</th>
-                            <th class="font-semibold">Role & Status</th>
-                            <th class="font-semibold">Transaksi</th>
-                            <th class="font-semibold">Aktivitas</th>
-                            <th class="font-semibold">Aksi</th>
+                            <th class="font-semibold text-center w-16">No</th>
+                            <th class="font-semibold min-w-[250px]">Pengguna</th>
+                            <th class="font-semibold text-center min-w-[140px]">Role & Status</th>
+                            <th class="font-semibold text-center min-w-[150px]">Transaksi</th>
+                            <th class="font-semibold text-center min-w-[150px]">Aktivitas</th>
+                            <th class="font-semibold text-center w-24">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($users as $index => $user)
                             <tr class="hover transition-colors hover:bg-base-200">
                                 {{-- Number --}}
-                                <td class="font-mono text-sm">
+                                <td class="font-mono text-sm text-center font-semibold">
                                     {{ ($users->currentPage() - 1) * $users->perPage() + $index + 1 }}
                                 </td>
 
@@ -323,8 +323,8 @@
                                 </td>
 
                                 {{-- Role & Status --}}
-                                <td>
-                                    <div class="flex flex-col gap-2">
+                                <td class="text-center">
+                                    <div class="flex flex-col gap-2 items-center">
                                         @if ($user->role === 'admin')
                                             <span class="badge badge-primary badge-sm">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1"
@@ -360,8 +360,8 @@
                                 </td>
 
                                 {{-- Transaction Info --}}
-                                <td>
-                                    <div class="flex flex-col gap-1">
+                                <td class="text-center">
+                                    <div class="flex flex-col gap-1 items-center">
                                         <div class="flex items-center gap-2">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-500"
                                                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -383,26 +383,25 @@
                                 </td>
 
                                 {{-- Activity Info --}}
-                                <td>
-                                    <div class="flex flex-col gap-1">
+                                <td class="text-center">
+                                    <div class="flex flex-col gap-1 items-center">
                                         {{-- Online Status --}}
                                         <div class="flex items-center gap-2">
                                             @php
                                                 $isOnline =
-                                                    $user->last_active && $user->last_active->diffInMinutes(now()) >= 5 && $user->status === 'active';
+                                                    $user->last_active && $user->last_active->diffInMinutes(now()) <= 5 && $user->status === 'active';
                                             @endphp
                                             @if ($isOnline)
                                                 <div class="inline-grid *:[grid-area:1/1]">
                                                     <div class="status status-success animate-ping"></div>
                                                     <div class="status status-success"></div>
                                                 </div>
-                                                <span class="text-xs font-medium">Online</span>
+                                                <span class="text-xs font-medium text-success">Online</span>
                                             @else
                                                 <div class="inline-grid *:[grid-area:1/1]">
-                                                    <div class="status status-error animate-ping"></div>
                                                     <div class="status status-error"></div>
                                                 </div>
-                                                <span class="text-xs font-medium">Offline</span>
+                                                <span class="text-xs font-medium text-error">Offline</span>
                                             @endif
                                         </div>
 

@@ -225,8 +225,8 @@
     </div>
 
     {{-- Modern Table Card --}}
-    <div class="card bg-base-100 border border-base-300">
-        <div class="card-body">
+    <div class="card bg-base-100 border border-base-300" style="overflow: visible;">
+        <div class="card-body" style="overflow: visible;">
             {{-- Header --}}
             <div class="flex items-center justify-between mb-6">
                 <div>
@@ -437,130 +437,128 @@
             </div>
 
             {{-- Modern Table --}}
-            <div class="overflow-x-auto card p-5 bg-base-100 border border-base-300">
-                <table class="table table-hover w-full overflow-auto">
+            <div class="overflow-x-auto card p-5 bg-base-100 border border-base-300" style="overflow: visible;">
+                <table class="table table-hover w-full table-compact" style="overflow: visible;">
                     <thead>
                         <tr class="bg-base-200">
-                            <th class="font-semibold">#</th>
-                            <th class="font-semibold">Transaksi</th>
-                            <th class="font-semibold">Pelanggan</th>
-                            <th class="font-semibold">Produk</th>
-                            <th class="font-semibold">Pembayaran</th>
-                            <th class="font-semibold">Total</th>
-                            <th class="font-semibold">Status</th>
-                            <th class="font-semibold">Aksi</th>
+                            <th class="font-semibold text-center" style="width: 50px;">#</th>
+                            <th class="font-semibold text-center" style="width: 160px;">Transaksi</th>
+                            <th class="font-semibold text-center" style="width: 180px;">Pelanggan</th>
+                            <th class="font-semibold text-center" style="width: 150px;">Produk</th>
+                            <th class="font-semibold text-center" style="width: 120px;">Pembayaran</th>
+                            <th class="font-semibold text-center" style="width: 120px;">Total</th>
+                            <th class="font-semibold text-center" style="width: 130px;">Status</th>
+                            <th class="font-semibold text-center" style="width: 80px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($transactions as $index => $transaction)
                             <tr class="hover transition-colors hover:bg-base-200">
                                 {{-- Number --}}
-                                <td class="font-mono text-sm">
+                                <td class="font-mono text-sm text-center font-semibold">
                                     {{ ($transactions->currentPage() - 1) * $transactions->perPage() + $index + 1 }}
                                 </td>
 
                                 {{-- Transaction Info --}}
-                                <td>
-                                    <div class="flex flex-col gap-1">
-                                        <div class="font-mono font-semibold text-sm">
+                                <td class="text-center py-2">
+                                    <div class="flex flex-col gap-0.5 items-center">
+                                        <div class="font-mono font-bold text-xs text-primary">
                                             {{ $transaction->transaction_code }}
                                         </div>
                                         <div class="text-xs text-base-content/60">
-                                            {{ $transaction->created_at->format('d/m/Y H:i') }}
+                                            {{ $transaction->created_at->format('d M Y') }}
                                         </div>
-                                        <div class="text-xs text-base-content/60 capitalize">
-                                            {{ $transaction->billing_cycle }}
+                                        <div class="text-xs text-base-content/60">
+                                            {{ $transaction->created_at->format('H:i') }}
                                         </div>
                                     </div>
                                 </td>
 
                                 {{-- Customer Info --}}
-                                <td>
-                                    <div class="flex items-center space-x-2">
+                                <td class="py-2">
+                                    <div class="flex items-center gap-2">
                                         <div class="avatar placeholder">
                                             <div class="bg-neutral text-neutral-content w-8 h-8 rounded-full">
-                                                <span class="text-xs">{{ substr($transaction->user->full_name, 0, 2) }}</span>
+                                                <span class="text-xs font-semibold">{{ strtoupper(substr($transaction->user->full_name, 0, 2)) }}</span>
                                             </div>
                                         </div>
-                                        <div>
-                                            <div class="font-semibold">{{ $transaction->user->full_name }}</div>
-                                            <div class="text-xs text-base-content/60">{{ $transaction->user->email }}</div>
+                                        <div class="text-left">
+                                            <div class="font-semibold text-xs truncate" style="max-width: 120px;">{{ $transaction->user->full_name }}</div>
+                                            <div class="text-xs text-base-content/60 truncate" style="max-width: 120px;">{{ $transaction->user->email }}</div>
                                         </div>
                                     </div>
                                 </td>
 
                                 {{-- Product Info --}}
-                                <td>
-                                    <div class="flex flex-col gap-1">
-                                        <div class="font-semibold truncate max-w-[150px]">
+                                <td class="text-center py-2">
+                                    <div class="flex flex-col gap-0.5 items-center">
+                                        <div class="font-semibold text-xs truncate" style="max-width: 140px;" title="{{ $transaction->product->name_product }}">
                                             {{ $transaction->product->name_product }}
                                         </div>
                                         <div class="text-xs text-base-content/60">
-                                            {{ $transaction->product->product_code }}
+                                            {{ ucfirst($transaction->billing_cycle) }}
                                         </div>
                                     </div>
                                 </td>
 
                                 {{-- Payment Info --}}
-                                <td>
-                                    <div class="flex flex-col gap-1">
-                                        <div class="font-semibold">{{ $transaction->payment->payment_method }}</div>
-                                        <div class="text-xs text-base-content/60 font-mono">{{ $transaction->payment->payment_account_number }}</div>
+                                <td class="text-center py-2">
+                                    <div class="flex flex-col gap-0.5 items-center">
+                                        <div class="font-semibold text-xs">{{ $transaction->payment->payment_method }}</div>
+                                        <div class="text-xs text-base-content/60">{{ $transaction->payment->payment_bank }}</div>
                                     </div>
                                 </td>
 
                                 {{-- Total --}}
-                                <td>
-                                    <div class="font-bold text-lg text-primary">
-                                        Rp {{ number_format($transaction->total_payment, 0, ',', '.') }}
+                                <td class="text-center py-2">
+                                    <div class="font-bold text-xs text-primary">
+                                        Rp {{ number_format($transaction->total_payment / 1000, 0) }}K
                                     </div>
                                 </td>
 
                                 {{-- Status --}}
-                                <td>
+                                <td class="text-center py-2">
                                     @php
                                         $statusConfig = [
-                                            'pending_payment' => ['class' => 'badge-soft badge-warning', 'text' => 'Pending Pembayaran'],
-                                            'pending_confirm' => ['class' => 'badge-soft badge-info', 'text' => 'Pending Konfirmasi'],
-                                            'active' => ['class' => 'badge-soft badge-success', 'text' => 'Aktif'],
-                                            'expired' => ['class' => 'badge-soft badge-error', 'text' => 'Kedaluwarsa'],
-                                            'canceled' => ['class' => 'badge-soft badge-neutral', 'text' => 'Dibatalkan'],
-                                            'rejected' => ['class' => 'badge-soft badge-error', 'text' => 'Ditolak'],
-                                            'refunded' => ['class' => 'badge-soft badge-accent', 'text' => 'Dikembalikan']
+                                            'pending_payment' => ['class' => 'badge-warning', 'text' => 'Pending'],
+                                            'pending_confirm' => ['class' => 'badge-info', 'text' => 'Confirm'],
+                                            'active' => ['class' => 'badge-success', 'text' => 'Active'],
+                                            'expired' => ['class' => 'badge-error', 'text' => 'Expired'],
+                                            'canceled' => ['class' => 'badge-neutral', 'text' => 'Canceled'],
+                                            'rejected' => ['class' => 'badge-error', 'text' => 'Rejected'],
+                                            'refunded' => ['class' => 'badge-accent', 'text' => 'Refunded']
                                         ];
-                                        $status = $statusConfig[$transaction->status] ?? ['class' => 'badge-soft badge-ghost', 'text' => ucfirst($transaction->status)];
+                                        $status = $statusConfig[$transaction->status] ?? ['class' => 'badge-ghost', 'text' => ucfirst($transaction->status)];
                                     @endphp
-                                    <div class="badge {{ $status['class'] }}">
+                                    <div class="badge {{ $status['class'] }} badge-xs gap-1 font-semibold">
                                         @if($transaction->status === 'active')
-                                            <div class="status status-success mr-1"></div>
+                                            <div class="status status-success"></div>
                                         @elseif($transaction->status === 'pending_confirm')
-                                            <div class="status status-info mr-1"></div>
+                                            <div class="status status-info"></div>
                                         @elseif($transaction->status === 'pending_payment')
-                                            <div class="status status-warning mr-1"></div>
+                                            <div class="status status-warning"></div>
                                         @else
-                                            <div class="status status-error mr-1"></div>
+                                            <div class="status status-error"></div>
                                         @endif
                                         {{ $status['text'] }}
                                     </div>
                                 </td>
 
                                 {{-- Actions Dropdown --}}
-                                <td>
-                                    <div class="flex justify-center">
-                                        @php
-                                            $totalTransactions = $transactions->count();
-                                            $currentIndex = $loop->index;
-                                            $isLastRows = $totalTransactions - $currentIndex <= 3;
-                                        @endphp
-                                        <div class="dropdown dropdown-end {{ $isLastRows ? 'dropdown-top' : '' }}">
-                                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                                                </svg>
-                                            </div>
-                                            <ul tabindex="0"
-                                                class="dropdown-content menu rounded-box z-50 w-52 p-2 shadow-xl bg-base-100 border border-base-300 {{ $isLastRows ? 'mb-2' : 'mt-2' }}">
+                                <td class="text-center">
+                                    @php
+                                        $totalTransactions = $transactions->count();
+                                        $currentIndex = $loop->index;
+                                        $isLastRows = $totalTransactions - $currentIndex <= 2;
+                                    @endphp
+                                    <details class="dropdown dropdown-end {{ $isLastRows ? 'dropdown-top' : 'dropdown-bottom' }}">
+                                        <summary class="btn btn-ghost btn-circle btn-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                            </svg>
+                                        </summary>
+                                        <ul class="menu dropdown-content rounded-box w-52 p-2 shadow-xl bg-base-100 border border-base-300 z-[9999]">
                                                 {{-- Detail Button - Always Available --}}
                                                 <li>
                                                     <a href="{{ route('admin.transactions.detail', $transaction->id) }}" wire:navigate
@@ -611,8 +609,7 @@
                                                     </li>
                                                 @endif
                                             </ul>
-                                        </div>
-                                    </div>
+                                        </details>
                                 </td>
                             </tr>
                         @empty

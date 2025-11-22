@@ -60,15 +60,36 @@ class AuthController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        // Coba login
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->filled('remember'))) {
+        // Cek user dan tentukan guard
+        $credentials = ['email' => $request->email, 'password' => $request->password];
+        $user = \App\Models\User::where('email', $request->email)->first();
+        
+        if (!$user) {
+            if ($isAjax) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Email atau password salah!',
+                    'errors' => []
+                ], 401);
+            }
+            return back()->withErrors(['email' => 'Email tidak ditemukan'])->withInput();
+        }
+        
+        // Tentukan guard berdasarkan role user
+        $guard = $user->role === 'admin' ? 'admin' : 'member';
+        
+        // Set cookie name sesuai guard SEBELUM login
+        if ($guard === 'admin') {
+            config(['session.cookie' => 'laravel_session_admin']);
+        } else {
+            config(['session.cookie' => 'laravel_session_member']);
+        }
+        
+        // Coba login dengan guard yang sesuai
+        if (Auth::guard($guard)->attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
             
-            $user = Auth::user();
-            
-            // Update last_active
-            $user->last_active = now();
-            $user->save();
+            $user = Auth::guard($guard)->user();
             
             // Tentukan redirect URL
             $redirectUrl = $user->role === 'admin' ? '/admin/dashboard' : '/dashboard';
@@ -84,9 +105,9 @@ class AuthController extends Controller
             
             // Redirect berdasarkan role
             if ($user->role === 'admin') {
-                return redirect()->intended('/admin');
+                return redirect()->intended('/admin/dashboard');
             } else {
-                return redirect()->intended('/member/dashboard');
+                return redirect()->intended('/dashboard');
             }
         }
 
@@ -134,10 +155,6 @@ class AuthController extends Controller
             $request->session()->regenerate();
             
             $user = Auth::user();
-            
-            // Update last_active
-            $user->last_active = now();
-            $user->save();
             
             // Tentukan redirect URL
             $redirectUrl = $user->role === 'admin' ? url('/admin/dashboard') : url('/dashboard');

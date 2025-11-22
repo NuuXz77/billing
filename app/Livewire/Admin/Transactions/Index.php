@@ -250,7 +250,7 @@ class Index extends Component
             ->when($this->paymentFilter, function ($query) {
                 $query->where('payment_id', $this->paymentFilter);
             })
-            ->latest()
+            ->orderBy('user_transaction_number', 'asc')
             ->paginate($this->perPage);
 
         $products = Products::where('status', 1)->get();

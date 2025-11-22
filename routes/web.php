@@ -44,12 +44,15 @@ Route::get('/terms-and-conditions', function () {
     return view('frontend.landing_page', ['showTermsAndConditions' => true]);
 })->name('terms-and-conditions');
 
-//Route untuk guest only (auth routes)
-Route::middleware('guest')->group(function () {
-    // Authentication Routes
+//Route untuk guest dan authenticated (bisa logout dulu sebelum login lagi)
+Route::group([], function () {
+    // Authentication Routes - tanpa middleware khusus, cookie di-set di controller
     Route::get('/auth/login', [App\Http\Controllers\AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/auth/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login.post');
-    Route::post('/auth/login/ajax', [App\Http\Controllers\AuthController::class, 'loginAjax'])->name('login.ajax');
+    Route::post('/auth/login/ajax', [App\Http\Controllers\AuthController::class, 'login'])->name('login.ajax');
+});
+
+Route::middleware('guest')->group(function () {
     Route::get('/auth/register', [App\Http\Controllers\AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/auth/register', [App\Http\Controllers\AuthController::class, 'register'])->name('register.post');
     Route::post('/auth/register/ajax', [App\Http\Controllers\AuthController::class, 'registerAjax'])->name('register.ajax');

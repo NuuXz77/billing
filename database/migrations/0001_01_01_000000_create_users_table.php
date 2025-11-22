@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('full_name');
             $table->string('username')->unique(); //digunakan untuk subdomain nantinya
             $table->string('password');
-            $table->enum('status', ['active','inactive' ,'suspended', 'deleted'])->default('active');
+            $table->enum('status', ['active', 'inactive', 'suspended', 'deleted'])->default('active');
             $table->string('foto_profile')->nullable(); //
             $table->string('phone')->nullable();
             $table->text('address')->nullable(); // alamat lengkap

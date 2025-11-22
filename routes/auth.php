@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
 // Route khusus admin (hanya bisa diakses oleh role admin)
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['admin.session', 'auth:admin', 'role:admin'])->group(function () {
     Route::get('/admin/profile', \App\Livewire\Admin\Profile\Index::class)->name('admin-profile');
     Route::get('/admin/dashboard', \App\Livewire\Admin\Dashboard\Index::class)->name('admin-dashboard');
 
@@ -27,7 +27,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 // Route untuk members (require authentication)
-Route::middleware(['auth', 'role:member'])->group(function () {
+Route::middleware(['member.session', 'auth:member', 'role:member'])->group(function () {
     // Dashboard route - langsung pakai users.blade.php
     Route::get('/dashboard', function () {
         return view('members.members');
@@ -319,7 +319,16 @@ Route::middleware(['auth', 'role:member'])->group(function () {
                 \Storage::makeDirectory('public/payment_proofs');
             }
             
-            $path = $file->storeAs('public/payment_proofs', $filename);
+            // Store file
+            $path = $file->storeAs('payment_proofs', $filename, 'public');
+            
+            // Log the upload for debugging
+            \Log::info('Payment proof uploaded', [
+                'filename' => $filename,
+                'path' => $path,
+                'full_path' => storage_path('app/public/' . $path),
+                'exists' => file_exists(storage_path('app/public/' . $path))
+            ]);
             
             // Build admin notes
             $notes = "Sender: {$request->sender_name}";

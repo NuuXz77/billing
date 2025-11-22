@@ -14,6 +14,14 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'admin.session' => \App\Http\Middleware\AdminSessionMiddleware::class,
+            'member.session' => \App\Http\Middleware\MemberSessionMiddleware::class,
+            'update.last.active' => \App\Http\Middleware\UpdateLastActive::class,
+        ]);
+        
+        // Add UpdateLastActive to web middleware group
+        $middleware->web(append: [
+            \App\Http\Middleware\UpdateLastActive::class,
         ]);
         
         // Exclude API routes from CSRF verification

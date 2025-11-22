@@ -441,14 +441,14 @@
                 <table class="table table-hover w-full overflow-auto">
                     <thead>
                         <tr class="bg-base-200">
-                            <th class="font-semibold">#</th>
-                            <th class="font-semibold">Transaksi</th>
-                            <th class="font-semibold">Pelanggan</th>
-                            <th class="font-semibold">Produk</th>
-                            <th class="font-semibold">Pembayaran</th>
-                            <th class="font-semibold">Total</th>
-                            <th class="font-semibold">Status</th>
-                            <th class="font-semibold">Aksi</th>
+                            <th class="font-semibold text-center" style="width: 50px;">#</th>
+                            <th class="font-semibold text-center" style="width: 160px;">Transaksi</th>
+                            <th class="font-semibold text-center" style="width: 180px;">Pelanggan</th>
+                            <th class="font-semibold text-center" style="width: 150px;">Produk</th>
+                            <th class="font-semibold text-center" style="width: 120px;">Pembayaran</th>
+                            <th class="font-semibold text-center" style="width: 120px;">Total</th>
+                            <th class="font-semibold text-center" style="width: 130px;">Status</th>
+                            <th class="font-semibold text-center" style="width: 80px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -460,59 +460,59 @@
                                 </td>
 
                                 {{-- Transaction Info --}}
-                                <td>
-                                    <div class="flex flex-col gap-1">
-                                        <div class="font-mono font-semibold text-sm">
+                                <td class="text-center py-2">
+                                    <div class="flex flex-col gap-0.5 items-center">
+                                        <div class="font-mono font-bold text-xs text-primary">
                                             {{ $transaction->transaction_code }}
                                         </div>
                                         <div class="text-xs text-base-content/60">
-                                            {{ $transaction->created_at->format('d/m/Y H:i') }}
+                                            {{ $transaction->created_at->format('d M Y') }}
                                         </div>
-                                        <div class="text-xs text-base-content/60 capitalize">
-                                            {{ $transaction->billing_cycle }}
+                                        <div class="text-xs text-base-content/60">
+                                            {{ $transaction->created_at->format('H:i') }}
                                         </div>
                                     </div>
                                 </td>
 
                                 {{-- Customer Info --}}
                                 <td>
-                                    <div class="flex items-center space-x-2">
+                                    <div class="flex items-center gap-2">
                                         <div class="avatar placeholder">
                                             <div class="bg-neutral text-neutral-content w-8 h-8 rounded-full">
-                                                <span class="text-xs">{{ substr($transaction->user->full_name, 0, 2) }}</span>
+                                                <span class="text-xs font-semibold">{{ strtoupper(substr($transaction->user->full_name, 0, 2)) }}</span>
                                             </div>
                                         </div>
-                                        <div>
-                                            <div class="font-semibold">{{ $transaction->user->full_name }}</div>
-                                            <div class="text-xs text-base-content/60">{{ $transaction->user->email }}</div>
+                                        <div class="text-left">
+                                            <div class="font-semibold text-xs truncate">{{ $transaction->user->full_name }}</div>
+                                            <div class="text-xs text-base-content/60 truncate">{{ $transaction->user->email }}</div>
                                         </div>
                                     </div>
                                 </td>
 
                                 {{-- Product Info --}}
-                                <td>
-                                    <div class="flex flex-col gap-1">
-                                        <div class="font-semibold truncate max-w-[150px]">
+                                <td class="text-center">
+                                    <div class="flex flex-col gap-0.5 items-center">
+                                        <div class="font-semibold text-xs truncate" style="max-width: 140px;" title="{{ $transaction->product->name_product }}">
                                             {{ $transaction->product->name_product }}
                                         </div>
                                         <div class="text-xs text-base-content/60">
-                                            {{ $transaction->product->product_code }}
+                                            {{ ucfirst($transaction->billing_cycle) }}
                                         </div>
                                     </div>
                                 </td>
 
                                 {{-- Payment Info --}}
-                                <td>
-                                    <div class="flex flex-col gap-1">
-                                        <div class="font-semibold">{{ $transaction->payment->payment_method }}</div>
-                                        <div class="text-xs text-base-content/60 font-mono">{{ $transaction->payment->payment_account_number }}</div>
+                                <td class="text-center">
+                                    <div class="flex flex-col gap-0.5 items-center">
+                                        <div class="font-semibold text-xs">{{ $transaction->payment->payment_method }}</div>
+                                        <div class="text-xs text-base-content/60">{{ $transaction->payment->payment_bank }}</div>
                                     </div>
                                 </td>
 
                                 {{-- Total --}}
-                                <td>
-                                    <div class="font-bold text-lg text-primary">
-                                        Rp {{ number_format($transaction->total_payment, 0, ',', '.') }}
+                                <td class="text-center">
+                                    <div class="font-bold text-xs text-primary">
+                                        Rp {{ number_format($transaction->total_payment / 1000, 0) }}K
                                     </div>
                                 </td>
 
@@ -520,15 +520,15 @@
                                 <td>
                                     @php
                                         $statusConfig = [
-                                            'pending_payment' => ['class' => 'badge-soft badge-warning', 'text' => 'Pending Pembayaran'],
-                                            'pending_confirm' => ['class' => 'badge-soft badge-info', 'text' => 'Pending Konfirmasi'],
-                                            'active' => ['class' => 'badge-soft badge-success', 'text' => 'Aktif'],
-                                            'expired' => ['class' => 'badge-soft badge-error', 'text' => 'Kedaluwarsa'],
-                                            'canceled' => ['class' => 'badge-soft badge-neutral', 'text' => 'Dibatalkan'],
-                                            'rejected' => ['class' => 'badge-soft badge-error', 'text' => 'Ditolak'],
-                                            'refunded' => ['class' => 'badge-soft badge-accent', 'text' => 'Dikembalikan']
+                                            'pending_payment' => ['class' => 'badge-soft badge-sm badge-warning', 'text' => 'Pending Pembayaran'],
+                                            'pending_confirm' => ['class' => 'badge-soft badge-sm badge-info', 'text' => 'Pending Konfirmasi'],
+                                            'active' => ['class' => 'badge-soft badge-sm badge-success', 'text' => 'Aktif'],
+                                            'expired' => ['class' => 'badge-soft badge-sm badge-error', 'text' => 'Kedaluwarsa'],
+                                            'canceled' => ['class' => 'badge-soft badge-sm badge-neutral', 'text' => 'Dibatalkan'],
+                                            'rejected' => ['class' => 'badge-soft badge-sm badge-error', 'text' => 'Ditolak'],
+                                            'refunded' => ['class' => 'badge-soft badge-sm badge-accent', 'text' => 'Dikembalikan']
                                         ];
-                                        $status = $statusConfig[$transaction->status] ?? ['class' => 'badge-soft badge-ghost', 'text' => ucfirst($transaction->status)];
+                                        $status = $statusConfig[$transaction->status] ?? ['class' => 'badge-soft badge-ghost badge-sm', 'text' => ucfirst($transaction->status)];
                                     @endphp
                                     <div class="badge {{ $status['class'] }}">
                                         @if($transaction->status === 'active')

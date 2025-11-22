@@ -80,14 +80,14 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="/admin/users/profiles" wire:navigate
-                                    class="flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-200 text-sm {{ request()->is('admin/users/profiles*') ? 'bg-primary/20 text-primary font-semibold' : 'hover:bg-primary/10 hover:text-primary' }}">
+                                <a href="/admin/profile" wire:navigate
+                                    class="flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-200 text-sm {{ request()->is('admin/profile') ? 'bg-primary/20 text-primary font-semibold' : 'hover:bg-primary/10 hover:text-primary' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
-                                    <span>User Profiles</span>
+                                    <span>Profile</span>
                                 </a>
                             </li>
                         </ul>

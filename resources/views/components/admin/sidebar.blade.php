@@ -93,21 +93,21 @@
                         </ul>
                     </li>
 
-                    <!-- Hosting Plans
+                    <!-- Products -->
                     <li>
-                        <a href="/admin/hosting-plans" wire:navigate
+                        <a href="/admin/products" wire:navigate
                             :class="(sidebarOpen || hoverOpen) ? 'justify-start' : 'justify-center'"
-                            class="flex items-center gap-3 py-3 px-4 rounded-lg transition-all duration-200 {{ request()->is('admin/hosting-plans*') ? 'bg-primary text-primary-content border-primary/30' : 'hover:bg-primary/10 hover:text-primary border-transparent hover:border-primary/20' }} border tooltip tooltip-right"
-                            :data-tip="!sidebarOpen && !hoverOpen ? 'Hosting Plans' : ''">
+                            class="flex items-center gap-3 py-3 px-4 rounded-lg transition-all duration-200 {{ request()->is('admin/products*') ? 'bg-primary text-primary-content border-primary/30' : 'hover:bg-primary/10 hover:text-primary border-transparent hover:border-primary/20' }} border tooltip tooltip-right"
+                            :data-tip="!sidebarOpen && !hoverOpen ? 'Products' : ''">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
                             </svg>
                             <span x-show="sidebarOpen || hoverOpen" x-transition
-                                class="font-medium whitespace-nowrap">Hosting Plans</span>
+                                class="font-medium whitespace-nowrap">Products</span>
                         </a>
-                    </li> -->
+                    </li> 
 
                     <!-- Subscriptions
                     <li>

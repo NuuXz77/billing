@@ -21,8 +21,8 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->decimal('total_payment', 10, 2);
-            $table->string('subdomain_web')->nullable();
-            $table->string('subdomain_server')->nullable();
+            $table->string('subdomain_web')->nullable(); // diisi oleh admin
+            $table->string('subdomain_server')->nullable(); // diisi oleqh admin
             $table->enum('billing_cycle', ['monthly', 'yearly', 'custom'])->default('monthly');
             $table->string('payment_proof')->nullable(); // Nama file image saja, file asli di storage
             $table->text('admin_notes')->nullable(); // Admin notes for approval/rejection

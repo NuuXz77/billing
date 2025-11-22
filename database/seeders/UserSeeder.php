@@ -34,5 +34,17 @@ class UserSeeder extends Seeder
             'status' => 'active',
             'last_active' => now(),
         ]);
+
+        // Member User
+        User::create([
+            'user_code' => 'MBR-' . strtoupper(Str::random(6)),
+            'role' => 'member',
+            'email' => 'wisnusatriyadi92@gmail.com',
+            'full_name' => 'Member User',
+            'username' => 'memberaja',
+            'password' => Hash::make('hohohoho'),
+            'status' => 'active',
+            'last_active' => now(),
+        ]);
     }
 }

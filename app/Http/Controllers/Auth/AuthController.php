@@ -38,6 +38,9 @@ class AuthController extends Controller
             
             // Redirect based on role
             $user = Auth::user();
+            // tambahkan update last_login
+            $user->status = 'active';
+            $user->save();
             if ($user->role === 'admin') {
                 return redirect()->intended('/admin/dashboard')
                     ->with('success', 'Selamat datang Admin!');
@@ -119,8 +122,13 @@ class AuthController extends Controller
     // Logout Method
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        $user->status = 'inactive';
+        $user->last_active = now();
+        $user->save();
         Auth::logout();
-        
+        // tambah last active
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         

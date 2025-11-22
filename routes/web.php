@@ -6,7 +6,8 @@ use Livewire\Volt\Volt;
 
 //Route bebas tanpa middleware
 Route::post('/logout', [App\Http\Controllers\Auth\AuthController::class, 'logout'])->name('logout');
-
+	
+Route::get('/kirimemail',[]);
 // Route::get('/', function () {
 //     return view('frontend.index');
 // })->name('index');

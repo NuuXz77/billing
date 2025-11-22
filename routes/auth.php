@@ -10,6 +10,19 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     // User Management Routes (using modals)
     Route::get('/admin/users', \App\Livewire\Admin\Users\Index::class)->name('admin.users.index');
+
+    // Product Management Routes
+    Route::get('/admin/products', \App\Livewire\Admin\Products\Index::class)->name('admin.products.index');
+    
+    // Payment Management Routes
+    Route::get('/admin/payments', \App\Livewire\Admin\Payments\Index::class)->name('admin.payments.index');
+
+    // Transaction Management Routes
+    Route::get('/admin/transactions', \App\Livewire\Admin\Transactions\Index::class)->name('admin.transactions.index');
+    Route::get('/admin/transactions/{transactionId}', \App\Livewire\Admin\Transactions\Detail::class)->name('admin.transactions.detail');
+
+    // Report Management Routes
+    Route::get('/admin/reports', \App\Livewire\Admin\Reports\Index::class)->name('admin.reports.index');
     
 });
 

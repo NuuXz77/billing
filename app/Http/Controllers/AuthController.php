@@ -80,6 +80,12 @@ class AuthController extends Controller
                     'message' => 'Login berhasil! Selamat datang kembali.',
                     'redirect' => $redirectUrl
                 ]);
+            // Redirect berdasarkan role
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin');
+            } else {
+                return redirect()->intended('/member/dashboard');
+
             }
             
             // Redirect normal

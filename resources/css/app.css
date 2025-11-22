@@ -24,7 +24,7 @@
 } */
 
 @plugin "daisyui" {
-    themes: light --default;
+    themes: light --default, dark --prefersdark;
 }
 
 
@@ -66,7 +66,7 @@
 
 
 
-/* @plugin "daisyui/theme" {
+@plugin "daisyui/theme" {
   name: "dark";
   default: false;
   prefersdark: true;
@@ -99,7 +99,7 @@
   --border: 1px;
   --depth: 1;
   --noise: 0;
-} */
+}
 
 
 

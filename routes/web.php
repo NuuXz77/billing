@@ -62,12 +62,11 @@ Route::middleware('auth')->group(function () {
     
     // Password update route
     Route::post('/password/update', [App\Http\Controllers\AuthController::class, 'updatePassword'])->name('password.update');
-    
-    // Cart route for members
-    Route::get('/members/cart', function () {
-        return view('members.members', ['section' => 'cart']);
-    })->name('members.cart');
-    
+	
+Route::get('/kirimemail',[]);
+// Route::get('/', function () {
+//     return view('frontend.index');
+// })->name('index');
 });
 
 //inikan menambahkan file route lain

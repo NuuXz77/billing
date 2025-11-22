@@ -139,28 +139,12 @@ class Index extends Component
             'full_name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username',
             'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'confirmed', Password::min(8)->mixedCase()->numbers()],
+            'password' => ['required', Password::min(6)->mixedCase()->numbers()],
             'role' => 'required|in:admin,member',
             'status' => 'required|in:active,inactive,suspended',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string',
-            'district' => 'nullable|string|max:100',
-            'city' => 'nullable|string|max:100',
-            'province' => 'nullable|string|max:100',
-            'pos_code' => 'nullable|string|max:10',
-            'country' => 'nullable|string|max:100',
-            'company_name' => 'nullable|string|max:255',
-            'foto_profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Handle foto profile upload
-        if ($this->foto_profile) {
-            $filename = time() . '_' . $this->foto_profile->getClientOriginalName();
-            $this->foto_profile->storeAs('public/profiles', $filename);
-            $validated['foto_profile'] = 'profiles/' . $filename;
-        }
-
-        $validated['user_code'] = 'USR-' . strtoupper(uniqid());
+        $validated['user_code'] = 'MBR-' . strtoupper(uniqid());
         $validated['password'] = Hash::make($validated['password']);
         $validated['last_active'] = now();
 
@@ -243,6 +227,10 @@ class Index extends Component
     public function render()
     {
         $users = User::query()
+            ->withCount('transactions')
+            ->with(['transactions' => function ($query) {
+                $query->latest()->take(1);
+            }])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('full_name', 'like', '%' . $this->search . '%')
@@ -260,8 +248,29 @@ class Index extends Component
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 
+        // Add last transaction date for each user
+        $users->getCollection()->transform(function ($user) {
+            $user->last_transaction_date = $user->transactions->first()?->created_at;
+            return $user;
+        });
+
         return view('livewire.admin.users.index', [
             'users' => $users
         ]);
+    }
+
+    public function generatePassword()
+    {
+        $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+        $this->password = substr(str_shuffle($chars), 0, 12);
+    }
+
+    public function resetFilters()
+    {
+        $this->reset(['search', 'roleFilter', 'statusFilter']);
+        // atau
+        $this->search = '';
+        $this->roleFilter = '';
+        $this->statusFilter = '';
     }
 }

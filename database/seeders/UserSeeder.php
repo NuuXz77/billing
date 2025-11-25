@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     {
         // Admin User
         User::create([
-            'user_code' => 'ADM-' . strtoupper(Str::random(6)),
+            'user_code' => '#ADMINHOCI',
             'role' => 'admin',
             'email' => 'adminhoci@gmail.com',
             'full_name' => 'Administrator',
@@ -25,7 +25,7 @@ class UserSeeder extends Seeder
 
         // Member User
         User::create([
-            'user_code' => 'MBR-' . strtoupper(Str::random(6)),
+            'user_code' => 'MBRHOCI0001',
             'role' => 'member',
             'email' => 'member@gmail.com',
             'full_name' => 'Member User',
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
 
         // Member User
         User::create([
-            'user_code' => 'MBR-' . strtoupper(Str::random(6)),
+            'user_code' => 'MBRHOCI0002',
             'role' => 'member',
             'email' => 'membergacor@gmail.com',
             'full_name' => 'GusCor',

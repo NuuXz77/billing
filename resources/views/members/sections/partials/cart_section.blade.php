@@ -1,3 +1,6 @@
+{{-- Include Modal Informasi --}}
+@include('members.sections.partials.partials_2.dropdown_transaksi.modal_informasi.modal_informasi')
+
 {{-- Keranjang Section --}}
 <section id="cart" class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen py-20 relative overflow-hidden">
     <!-- Background decoration -->
@@ -63,6 +66,75 @@
                         <p class="text-gray-700 text-sm">
                             <span id="free-notice-text"></span>
                         </p>
+                    </div>
+                </div>
+
+                <!-- Payment Method Section -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mt-6">
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-800">Pilih Pembayaran</h2>
+                    
+                    <div class="space-y-3">
+                        @php
+                            $groupedPayments = isset($payments) ? $payments->groupBy('payment_method') : collect();
+                            $methodIcons = [
+                                'Bank Transfer' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>',
+                                'E-Wallet' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>',
+                                'Retail' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>',
+                                'QRIS' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>',
+                            ];
+                        @endphp
+
+                        @foreach($groupedPayments as $method => $methodPayments)
+                            @if($method === 'QRIS')
+                                {{-- QRIS - No dropdown --}}
+                                <label class="flex items-center justify-between p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-blue-500 transition-all duration-200 payment-qris">
+                                    <div class="flex items-center gap-3">
+                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            {!! $methodIcons[$method] ?? '' !!}
+                                        </svg>
+                                        <span class="font-medium text-gray-700">{{ $method }}</span>
+                                    </div>
+                                    <input type="radio" 
+                                           name="payment_id" 
+                                           value="{{ $methodPayments->first()->id }}" 
+                                           data-method="{{ $method }}"
+                                           data-bank="{{ $methodPayments->first()->payment_bank }}"
+                                           data-number="{{ $methodPayments->first()->payment_account_number }}"
+                                           class="w-5 h-5 text-blue-600 focus:ring-blue-500">
+                                </label>
+                            @else
+                                {{-- Dropdown methods --}}
+                                <div class="border-2 border-gray-200 rounded-xl overflow-hidden hover:border-blue-500 transition-all duration-200 payment-category">
+                                    <label class="flex items-center justify-between p-4 cursor-pointer dropdown-header">
+                                        <div class="flex items-center gap-3">
+                                            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                {!! $methodIcons[$method] ?? '' !!}
+                                            </svg>
+                                            <span class="font-medium text-gray-700">{{ $method === 'Bank Transfer' ? 'Bank' : $method }}</span>
+                                        </div>
+                                        <svg class="w-5 h-5 text-gray-400 transform transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </label>
+                                    <div class="dropdown-options hidden border-t border-gray-200 bg-gray-50 p-3">
+                                        <div class="grid grid-cols-2 gap-2">
+                                            @foreach($methodPayments as $payment)
+                                                <label class="flex items-center gap-2 p-2 hover:bg-white rounded-lg cursor-pointer transition-colors">
+                                                    <input type="radio" 
+                                                           name="payment_id" 
+                                                           value="{{ $payment->id }}" 
+                                                           data-method="{{ $payment->payment_method }}"
+                                                           data-bank="{{ $payment->payment_bank }}"
+                                                           data-number="{{ $payment->payment_account_number }}"
+                                                           class="w-4 h-4 text-blue-600">
+                                                    <span class="text-sm text-gray-700">{{ $payment->payment_bank }}</span>
+                                                </label>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -163,6 +235,80 @@
 
 @push('scripts')
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle dropdown toggle
+        document.querySelectorAll('.dropdown-header').forEach(header => {
+            header.addEventListener('click', function(e) {
+                e.preventDefault();
+                const container = this.closest('.payment-category');
+                const options = container.querySelector('.dropdown-options');
+                const arrow = container.querySelector('.dropdown-arrow');
+                const isHidden = options.classList.contains('hidden');
+                
+                // Close all dropdowns
+                document.querySelectorAll('.dropdown-options').forEach(opt => opt.classList.add('hidden'));
+                document.querySelectorAll('.dropdown-arrow').forEach(arr => arr.classList.remove('rotate-180'));
+                document.querySelectorAll('.payment-category').forEach(cat => {
+                    cat.classList.remove('border-blue-500', 'bg-blue-50');
+                    cat.classList.add('border-gray-200');
+                });
+                
+                // Toggle current
+                if (isHidden) {
+                    options.classList.remove('hidden');
+                    arrow.classList.add('rotate-180');
+                    container.classList.add('border-blue-500', 'bg-blue-50');
+                    container.classList.remove('border-gray-200');
+                }
+            });
+        });
+        
+        // Handle QRIS selection
+        document.querySelectorAll('.payment-qris input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    // Close all dropdowns
+                    document.querySelectorAll('.dropdown-options').forEach(opt => opt.classList.add('hidden'));
+                    document.querySelectorAll('.dropdown-arrow').forEach(arr => arr.classList.remove('rotate-180'));
+                    
+                    // Reset category borders
+                    document.querySelectorAll('.payment-category').forEach(cat => {
+                        cat.classList.remove('border-blue-500', 'bg-blue-50');
+                        cat.classList.add('border-gray-200');
+                    });
+                    
+                    // Highlight QRIS
+                    const qrisLabel = this.closest('.payment-qris');
+                    document.querySelectorAll('.payment-qris').forEach(label => {
+                        label.classList.remove('border-blue-500', 'bg-blue-50');
+                        label.classList.add('border-gray-200');
+                    });
+                    qrisLabel.classList.add('border-blue-500', 'bg-blue-50');
+                    qrisLabel.classList.remove('border-gray-200');
+                }
+            });
+        });
+        
+        // Handle payment selection within dropdown
+        document.querySelectorAll('input[name="payment_id"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Highlight selected option in dropdown
+                document.querySelectorAll('.dropdown-options label').forEach(label => {
+                    label.classList.remove('bg-blue-100', 'border-blue-200');
+                });
+                
+                if (this.checked && this.closest('.dropdown-options')) {
+                    this.closest('label').classList.add('bg-blue-100');
+                    
+                    // Keep parent category highlighted
+                    const category = this.closest('.payment-category');
+                    category.classList.add('border-blue-500', 'bg-blue-50');
+                    category.classList.remove('border-gray-200');
+                }
+            });
+        });
+    });
+    
     document.addEventListener('DOMContentLoaded', function() {
         // Ambil data produk dari sessionStorage
         const selectedPlanData = sessionStorage.getItem('selectedHostingPlan');
@@ -287,6 +433,23 @@
         document.getElementById('checkout-btn').addEventListener('click', function() {
             const button = this;
             
+            // Cek apakah profil sudah lengkap
+            if (typeof window.checkProfileCompleteness === 'function') {
+                const incompleteFields = window.checkProfileCompleteness();
+                if (incompleteFields.length > 0) {
+                    window.showIncompleteProfileModal(incompleteFields);
+                    return;
+                }
+            }
+            
+            // Cek apakah payment sudah dipilih
+            const selectedPayment = document.querySelector('input[name="payment_id"]:checked');
+            
+            if (!selectedPayment) {
+                showInfoModal('warning', 'Metode Pembayaran Belum Dipilih', 'Silakan pilih metode pembayaran terlebih dahulu');
+                return;
+            }
+            
             // Ambil data dari sessionStorage
             const selectedPlanData = sessionStorage.getItem('selectedHostingPlan');
             if (!selectedPlanData) {
@@ -299,6 +462,9 @@
             const duration = parseInt(document.getElementById('duration-select').value);
             const priceMonthly = parseFloat(plan.price_monthly);
             const totalPayment = priceMonthly * duration;
+            const paymentId = selectedPayment.value;
+            const paymentMethod = selectedPayment.dataset.method;
+            const paymentBank = selectedPayment.dataset.bank;
             
             // Cari product_id - bisa dari field id, product_id, atau product_code
             const productId = plan.id || plan.product_id || null;
@@ -309,6 +475,9 @@
                 duration: duration,
                 total_payment: totalPayment,
                 billing_cycle: duration + ' bulan',
+                payment_id: paymentId,
+                payment_method: paymentMethod,
+                payment_bank: paymentBank,
                 plan: plan
             });
             
@@ -341,7 +510,8 @@
                     product_id: productId,
                     duration: duration,
                     total_payment: totalPayment,
-                    billing_cycle: duration + ' bulan'
+                    billing_cycle: duration + ' bulan',
+                    payment_id: paymentId
                 })
             })
             .then(response => {
@@ -358,35 +528,11 @@
                 if (data.success) {
                     console.log('Transaction created:', data.transaction);
                     
-                    // Fetch and inject pay now modal from server
-                    fetch(`/members/transaction-modal/${data.transaction.id}`)
-                        .then(response => response.text())
-                        .then(html => {
-                            const container = document.getElementById('newTransactionModalsContainer');
-                            container.innerHTML = html;
-                            
-                            // Execute scripts that were injected
-                            const scripts = container.querySelectorAll('script');
-                            scripts.forEach(script => {
-                                const newScript = document.createElement('script');
-                                if (script.src) {
-                                    newScript.src = script.src;
-                                } else {
-                                    newScript.textContent = script.textContent;
-                                }
-                                document.body.appendChild(newScript);
-                            });
-                            
-                            // Wait a bit then open modal
-                            setTimeout(() => {
-                                const modalId = 'payNowModal-' + data.transaction.id;
-                                const modal = document.getElementById(modalId);
-                                if (modal) {
-                                    modal.classList.remove('hidden');
-                                    document.body.style.overflow = 'hidden';
-                                }
-                            }, 300);
-                        });
+                    // Simpan transaction ID ke sessionStorage untuk dibuka modalnya di halaman history
+                    sessionStorage.setItem('showPayNowModal', data.transaction.id);
+                    
+                    // Redirect ke transaction history
+                    window.location.href = '/billing/history';
                 } else {
                     alert(data.message || 'Terjadi kesalahan saat membuat transaksi');
                     button.disabled = false;

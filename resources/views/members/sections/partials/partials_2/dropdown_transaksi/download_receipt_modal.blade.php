@@ -1,5 +1,5 @@
 {{-- Download Receipt Modal --}}
-<div id="downloadReceiptModal-{{ $transaction->id }}" class="hidden fixed inset-0 bg-gradient-to-br from-black/40 to-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 modal-backdrop-fade" onclick="if(event.target === this) closeModal('downloadReceiptModal-{{ $transaction->id }}')">
+<div id="downloadReceiptModal-{{ $transaction->id }}" class="hidden fixed inset-0 bg-gradient-to-br from-black/40 to-black/60 backdrop-blur-sm z-[99999] flex items-center justify-center p-4 modal-backdrop-fade" onclick="if(event.target === this) closeModal('downloadReceiptModal-{{ $transaction->id }}')">
     <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden flex flex-col modal-slideup" onclick="event.stopPropagation();">
         {{-- Modal Header --}}
         <div class="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-5 flex-shrink-0">

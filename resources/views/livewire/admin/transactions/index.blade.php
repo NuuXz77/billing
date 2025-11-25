@@ -438,7 +438,7 @@
 
             {{-- Modern Table --}}
             <div class="overflow-x-auto card p-5 bg-base-100 border border-base-300">
-                <table class="table table-hover w-full overflow-auto">
+                <table class="table table-hover w-full">
                     <thead>
                         <tr class="bg-base-200">
                             <th class="font-semibold text-center" style="width: 50px;">#</th>
@@ -547,20 +547,18 @@
                                 {{-- Actions Dropdown --}}
                                 <td>
                                     <div class="flex justify-center">
-                                        @php
-                                            $totalTransactions = $transactions->count();
-                                            $currentIndex = $loop->index;
-                                            $isLastRows = $totalTransactions - $currentIndex <= 3;
-                                        @endphp
-                                        <div class="dropdown dropdown-end {{ $isLastRows ? 'dropdown-top' : '' }}">
-                                            <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                                        <div class="relative inline-block text-left">
+                                            <button type="button" 
+                                                class="btn btn-ghost btn-circle" 
+                                                onclick="toggleDropdown(event, 'dropdown-trx-{{ $transaction->id }}')">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                         d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                                                 </svg>
-                                            </div>
-                                            <ul tabindex="0"
-                                                class="dropdown-content menu rounded-box z-50 w-52 p-2 shadow-xl bg-base-100 border border-base-300 {{ $isLastRows ? 'mb-2' : 'mt-2' }}">
+                                            </button>
+                                            <ul id="dropdown-trx-{{ $transaction->id }}" 
+                                                class="hidden fixed menu rounded-box w-52 p-2 shadow-xl bg-base-100 border border-base-300" 
+                                                style="z-index: 9999;">
                                                 {{-- Detail Button - Always Available --}}
                                                 <li>
                                                     <a href="{{ route('admin.transactions.detail', $transaction->id) }}" wire:navigate
@@ -647,4 +645,52 @@
     @include('livewire.admin.transactions.modals.confirm-subdomain')
     @include('livewire.admin.transactions.modals.confirm-admin')
     @include('livewire.admin.transactions.modals.reject')
+    
+    {{-- Dropdown Script --}}
+    <script>
+        function toggleDropdown(event, dropdownId) {
+            event.stopPropagation();
+            
+            // Close all other dropdowns
+            document.querySelectorAll('[id^="dropdown-trx-"]').forEach(dropdown => {
+                if (dropdown.id !== dropdownId) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+            
+            const dropdown = document.getElementById(dropdownId);
+            const button = event.currentTarget;
+            
+            if (dropdown.classList.contains('hidden')) {
+                // Show dropdown
+                dropdown.classList.remove('hidden');
+                
+                // Calculate position
+                const buttonRect = button.getBoundingClientRect();
+                const dropdownWidth = 208; // w-52 = 13rem = 208px
+                
+                // Position dropdown to the left of the button
+                dropdown.style.top = (buttonRect.bottom + 5) + 'px';
+                dropdown.style.left = (buttonRect.left - dropdownWidth + buttonRect.width) + 'px';
+            } else {
+                dropdown.classList.add('hidden');
+            }
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('[onclick^="toggleDropdown"]')) {
+                document.querySelectorAll('[id^="dropdown-trx-"]').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+            }
+        });
+        
+        // Close dropdown on scroll
+        window.addEventListener('scroll', function() {
+            document.querySelectorAll('[id^="dropdown-trx-"]').forEach(dropdown => {
+                dropdown.classList.add('hidden');
+            });
+        }, true);
+    </script>
 </div>

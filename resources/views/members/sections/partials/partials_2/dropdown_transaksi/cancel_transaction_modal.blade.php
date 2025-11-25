@@ -1,5 +1,5 @@
 {{-- Cancel Transaction Modal --}}
-<div id="cancelTransactionModal-{{ $transaction->id }}" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('cancelTransactionModal-{{ $transaction->id }}')">
+<div id="cancelTransactionModal-{{ $transaction->id }}" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[99999] flex items-center justify-center p-4" onclick="if(event.target === this) closeModal('cancelTransactionModal-{{ $transaction->id }}')">
     <div class="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all" onclick="event.stopPropagation();">
         {{-- Modal Header --}}
         <div class="bg-red-600 px-6 py-4 rounded-t-xl">

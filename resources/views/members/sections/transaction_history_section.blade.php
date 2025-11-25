@@ -235,13 +235,20 @@
                                                 </svg>
                                                 View Details
                                             </button>
-                                            @if(in_array($transaction->status, ['pending_payment', 'pending_confirm']))
-                                            <button onclick="openModal('{{ $transaction->status === 'pending_payment' ? 'payNowModal' : 'uploadProofModal' }}-{{ $transaction->id }}')" class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-white bg-green-600 hover:bg-green-700 transition-colors duration-200 font-semibold">
+                                            @if($transaction->status === 'pending_payment')
+                                            <button onclick="openModal('payNowModal-{{ $transaction->id }}')" class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-white bg-green-600 hover:bg-green-700 transition-colors duration-200 font-semibold">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
                                                 </svg>
-                                                {{ $transaction->status === 'pending_payment' ? 'Pay Now' : 'Upload Proof' }}
+                                                Pay Now
                                             </button>
+                                            <!-- button modal proof
+                                            <button onclick="openModal('uploadProofModal-{{ $transaction->id }}')" class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 transition-colors duration-200 font-semibold">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                                </svg>
+                                                Upload Proof
+                                            </button> -->
                                             @endif
                                             @if($transaction->status === 'active')
                                             <button onclick="openModal('downloadReceiptModal-{{ $transaction->id }}')" class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 transition-colors duration-200">
@@ -340,6 +347,9 @@
             @endif
         </div>
     </div>
+    
+    {{-- Container untuk Pay Now Modal yang akan di-inject dari checkout --}}
+    <div id="newTransactionModalsContainer"></div>
 </section>
 
 @push('scripts')
@@ -388,6 +398,48 @@
             dropdown.classList.add('hidden');
         });
     }, true);
+    
+    // Auto-open Pay Now Modal jika baru dari checkout
+    document.addEventListener('DOMContentLoaded', function() {
+        const transactionId = sessionStorage.getItem('showPayNowModal');
+        if (transactionId) {
+            // Hapus dari sessionStorage agar tidak muncul lagi
+            sessionStorage.removeItem('showPayNowModal');
+            
+            // Fetch dan tampilkan modal
+            fetch(`/members/transaction-modal/${transactionId}`)
+                .then(response => response.text())
+                .then(html => {
+                    const container = document.getElementById('newTransactionModalsContainer');
+                    container.innerHTML = html;
+                    
+                    // Execute scripts yang di-inject
+                    const scripts = container.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        const newScript = document.createElement('script');
+                        if (script.src) {
+                            newScript.src = script.src;
+                        } else {
+                            newScript.textContent = script.textContent;
+                        }
+                        document.body.appendChild(newScript);
+                    });
+                    
+                    // Tunggu sebentar lalu buka modal
+                    setTimeout(() => {
+                        const modalId = 'payNowModal-' + transactionId;
+                        const modal = document.getElementById(modalId);
+                        if (modal) {
+                            modal.classList.remove('hidden');
+                            document.body.style.overflow = 'hidden';
+                        }
+                    }, 500);
+                })
+                .catch(error => {
+                    console.error('Error loading modal:', error);
+                });
+        }
+    });
 </script>
 
 {{-- Include Modal Informasi --}}

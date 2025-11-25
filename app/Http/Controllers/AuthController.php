@@ -22,12 +22,12 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         // Check if AJAX request (multiple checks for reliability)
-        $isAjax = $request->ajax() 
-               || $request->wantsJson() 
-               || $request->expectsJson()
-               || $request->has('ajax')
-               || $request->header('X-Requested-With') === 'XMLHttpRequest';
-        
+        $isAjax = $request->ajax()
+            || $request->wantsJson()
+            || $request->expectsJson()
+            || $request->has('ajax')
+            || $request->header('X-Requested-With') === 'XMLHttpRequest';
+
         // DEBUG - Remove after testing
         \Log::info('Login attempt', [
             'isAjax' => $isAjax,
@@ -37,7 +37,7 @@ class AuthController extends Controller
             'wantsJson' => $request->wantsJson(),
             'expectsJson' => $request->expectsJson(),
         ]);
-        
+
         // Validasi input
         $validator = \Validator::make($request->all(), [
             'email' => 'required|email',
@@ -63,7 +63,7 @@ class AuthController extends Controller
         // Cek user dan tentukan guard
         $credentials = ['email' => $request->email, 'password' => $request->password];
         $user = \App\Models\User::where('email', $request->email)->first();
-        
+
         if (!$user) {
             if ($isAjax) {
                 return response()->json([
@@ -74,35 +74,48 @@ class AuthController extends Controller
             }
             return back()->withErrors(['email' => 'Email tidak ditemukan'])->withInput();
         }
-        
+
         // Tentukan guard berdasarkan role user
         $guard = $user->role === 'admin' ? 'admin' : 'member';
-        
+
         // Set cookie name sesuai guard SEBELUM login
         if ($guard === 'admin') {
             config(['session.cookie' => 'laravel_session_admin']);
         } else {
             config(['session.cookie' => 'laravel_session_member']);
         }
-        
+
         // Coba login dengan guard yang sesuai
         if (Auth::guard($guard)->attempt($credentials)) {
             $request->session()->regenerate();
-            
+
             $user = Auth::guard($guard)->user();
-            
+
             // Tentukan redirect URL
             $redirectUrl = $user->role === 'admin' ? '/admin/dashboard' : '/dashboard';
-            
+
             // Return JSON untuk AJAX request
             if ($isAjax) {
+                $hour = date('H'); // ambil jam (00-23)
+
+                if ($hour >= 5 && $hour < 12) {
+                    $timeGreeting = "Selamat Pagi";
+                } elseif ($hour >= 12 && $hour < 15) {
+                    $timeGreeting = "Selamat Siang";
+                } elseif ($hour >= 15 && $hour < 18) {
+                    $timeGreeting = "Selamat Sore";
+                } else {
+                    $timeGreeting = " Selamat Malam";
+                }
+                
+                $greeting =  $timeGreeting . ' ' . $user->full_name . '! Terima kasih telah menggunakan Hoci 👋';
                 return response()->json([
                     'success' => true,
-                    'message' => 'Login berhasil! Selamat datang kembali.',
+                    'message' => $greeting,
                     'redirect' => $redirectUrl
                 ]);
             }
-            
+
             // Redirect berdasarkan role
             if ($user->role === 'admin') {
                 return redirect()->intended('/admin/dashboard');
@@ -119,7 +132,7 @@ class AuthController extends Controller
                 'errors' => []
             ], 401);
         }
-        
+
         return back()
             ->withInput($request->only('email'))
             ->with('login_status', 'error')
@@ -153,15 +166,16 @@ class AuthController extends Controller
         // Coba login
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password], $request->filled('remember'))) {
             $request->session()->regenerate();
-            
+
             $user = Auth::user();
-            
+
             // Tentukan redirect URL
             $redirectUrl = $user->role === 'admin' ? url('/admin/dashboard') : url('/dashboard');
-            
+
+            $greeting = 'Halo, ' . $user->full_name . '! Selamat datang kembali.';
             return response()->json([
                 'success' => true,
-                'message' => 'Login berhasil! Selamat datang kembali.',
+                'message' => $greeting,
                 'redirect' => $redirectUrl
             ]);
         }
@@ -256,7 +270,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect('/');
     }
 

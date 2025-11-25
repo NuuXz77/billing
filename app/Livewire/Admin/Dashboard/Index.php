@@ -42,7 +42,7 @@ class Index extends Component
         $this->totalRevenue = Transaction::where('status', 'active')->sum('total_payment');
         
         // Pending Invoices
-        $this->pendingInvoices = Transaction::whereIn('status', ['pending_payment', 'pending_confirm'])->count();
+        $this->pendingInvoices = Transaction::whereIn('status', ['pending_payment'])->count();
         
         // Recent Transactions (latest 5 active subscriptions with user info)
         $this->recentTransactions = Transaction::with(['user', 'product'])
@@ -68,5 +68,32 @@ class Index extends Component
     public function render()
     {
         return view('livewire.admin.dashboard.index');
+    }
+    
+    // Navigation Methods dengan Filter
+    public function navigateToUsers()
+    {
+        // Set session untuk filter status active member di halaman users
+        session(['user_filter_status' => 'active']);
+        return $this->redirect('/admin/users', navigate: true);
+    }
+    
+    public function navigateToPayments()
+    {
+        return $this->redirect('/admin/payments', navigate: true);
+    }
+    
+    public function navigateToTransactions($status = null)
+    {
+        if ($status) {
+            // Set session untuk filter status di halaman transactions
+            if ($status === 'pending') {
+                // Untuk pending, gunakan pending_confirm karena itu yang biasanya butuh tindakan admin
+                session(['transaction_filter_status' => 'pending_payment']);
+            } else {
+                session(['transaction_filter_status' => $status]);
+            }
+        }
+        return $this->redirect('/admin/transactions', navigate: true);
     }
 }

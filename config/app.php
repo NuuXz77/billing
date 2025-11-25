@@ -123,4 +123,19 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Server Configuration for Email Templates
+    |--------------------------------------------------------------------------
+    |
+    | These values are used in email templates to provide server information
+    | and contact details to customers.
+    |
+    */
+
+    'server_name' => env('SERVER_NAME', 'ind-svr'),
+    'server_ip' => env('SERVER_IP', '103.59.160.21'),
+    'temp_ftp_host' => env('TEMP_FTP_HOST', 'server.nyanhosting.id'),
+    'whatsapp_support' => env('WHATSAPP_SUPPORT', '+62 812-3456-7890'),
+
 ];

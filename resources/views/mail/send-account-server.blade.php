@@ -3,140 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite('resources/css/app.css')
     <title>Informasi Akun Server</title>
+    
+    <!-- Google Fonts - Source Sans Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
             margin: 0;
             padding: 0;
-            background-color: #f8fafc;
+            background: #f5f7fa;
+            font-family: 'Source Sans Pro', Arial, sans-serif;
+            color: #1d1d1d;
+            line-height: 1.5;
         }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+
         .email-wrapper {
-            background: white;
+            width: 100%;
+            padding: 30px 0;
+            background: #f5f7fa;
+        }
+
+        .email-card {
+            width: 640px;
+            max-width: 100%;
+            margin: 0 auto;
+            background: #fff;
             border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e6e9ef;
             overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
+
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
             text-align: center;
+            padding: 40px 30px 0;
         }
-        .header h1 {
-            margin: 0;
+
+        .header-logo-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            vertical-align: middle;
+        }
+
+        .header-logo-container img {
+            width: 60px;
+            height: auto;
+        }
+
+        .header-texts {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            line-height: 1.2;
+            margin-left: 4px;
+        }
+
+        .header-hoci {
             font-size: 28px;
-            font-weight: bold;
+            font-weight: 700;
+            color: #0a76dd;
+            line-height: 1.1;
         }
-        .header p {
-            margin: 8px 0 0 0;
-            opacity: 0.9;
-            font-size: 16px;
+
+        .header-italic {
+            font-size: 14px;
+            font-style: italic;
+            color: #555;
+            margin-top: 4px;
+            text-align: center;
+            width: 100%;
         }
-        .content {
-            padding: 30px;
+
+        .divider {
+            width: 100%;
+            border-bottom: 1px solid #e5e8ee;
+            margin: 32px 0;
         }
-        .greeting {
-            margin-bottom: 25px;
+
+        .header-title {
+            font-size: 26px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 6px;
+            color: #0a76dd;
         }
-        .info-card {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px 0;
+
+        .header-subtitle {
+            font-size: 15px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 28px;
         }
-        .info-card h3 {
-            margin: 0 0 15px 0;
-            color: #2d3748;
-            font-size: 18px;
+
+        .section-title {
+            font-size: 19px;
+            font-weight: 600;
+            padding-bottom: 18px;
             display: flex;
             align-items: center;
+            gap: 8px;
+            color: #0a76dd;
+            margin-top: 24px;
         }
-        .info-card h3:before {
-            content: "🔗";
-            margin-right: 8px;
+
+        .grid {
+            width: 100%;
+            display: table;
+            border-spacing: 0;
+            margin-bottom: 28px;
         }
-        .server-info h3:before {
-            content: "🖥️";
+
+        .grid-column {
+            width: 50%;
+            padding: 0 6px;
+            display: table-cell;
+            vertical-align: top;
         }
-        .credentials-info h3:before {
-            content: "🔐";
+
+        .card {
+            background: #f8faff;
+            border: 1px solid #d9e2ff;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 15px;
+            height: 100%;
+            box-sizing: border-box;
         }
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .info-item {
-            background: white;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 4px solid #667eea;
-        }
-        .info-item label {
-            font-weight: 600;
-            color: #4a5568;
+
+        .card-title {
             font-size: 12px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            display: block;
-            margin-bottom: 5px;
         }
-        .info-item .value {
-            font-size: 16px;
-            color: #2d3748;
+
+        .card-value {
+            margin-bottom: 12px;
             font-weight: 500;
-            word-break: break-all;
+            color: #333;
         }
-        .credentials .value {
-            font-family: 'Courier New', monospace;
-            background: #f7fafc;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #e2e8f0;
-        }
-        .link-button {
+
+        .button {
             display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 12px 24px;
+            background: #0a76dd;
+            color: #fff;
             text-decoration: none;
+            padding: 8px 12px;
+            font-size: 13px;
             border-radius: 6px;
             font-weight: 600;
-            margin: 8px 8px 8px 0;
-            transition: background-color 0.3s;
+            transition: background-color 0.2s;
         }
-        .link-button:hover {
-            background: #5a67d8;
+
+        .button:hover {
+            background: #0968c4;
         }
-        .link-button.server {
-            background: #48bb78;
-        }
-        .link-button.server:hover {
-            background: #38a169;
-        }
-        .warning {
-            background: #fff5f5;
-            border: 1px solid #fed7d7;
-            color: #c53030;
-            padding: 15px;
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cfd3d7;
             border-radius: 6px;
-            margin: 20px 0;
+            font-size: 14px;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            background: #fff;
+            font-family: 'Courier New', monospace;
+            color: #333;
         }
-        .warning strong {
-            display: block;
-            margin-bottom: 5px;
+
+        .warning {
+            background: #fff4f4;
+            border-left: 4px solid #ff4d4d;
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-top: 18px;
+            color: #c53030;
         }
+
+        .footer {
+            background: #f9fafc;
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 13px;
+            border-top: 1px solid #e6e9ef;
+        }
+
         .additional-message {
             background: #edf2f7;
             border-left: 4px solid #4299e1;
@@ -144,115 +208,171 @@
             border-radius: 6px;
             margin: 20px 0;
         }
-        .footer {
-            background: #2d3748;
-            color: #cbd5e0;
-            padding: 25px;
+
+        .greeting {
+            margin-bottom: 25px;
+            font-size: 15px;
+            color: #444;
+        }
+
+        .support-info {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .support-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .support-icon {
+            color: #666;
+            width: 20px;
+            margin-right: 8px;
             text-align: center;
-            font-size: 14px;
         }
-        .footer p {
-            margin: 5px 0;
+
+        .support-label {
+            min-width: 130px;
+            font-weight: 600;
         }
-        .transaction-info {
-            background: #e6fffa;
-            border: 1px solid #81e6d9;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
+
+        .support-value {
+            margin-left: 8px;
         }
-        @media (max-width: 600px) {
-            .info-grid {
-                grid-template-columns: 1fr;
+
+        @media (max-width: 640px) {
+            .email-card {
+                width: 100%;
+                border-radius: 0;
             }
-            .container {
-                padding: 10px;
+            
+            .grid {
+                display: block;
             }
-            .content {
-                padding: 20px;
+            
+            .grid-column {
+                width: 100%;
+                display: block;
+                padding: 0;
+                margin-bottom: 12px;
+            }
+            
+            .header {
+                padding: 30px 20px 0;
+            }
+            
+            div[style*="padding:0 34px 32px"] {
+                padding: 0 20px 32px !important;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="email-wrapper">
-            {{-- Header --}}
+    <div class="email-wrapper">
+        <div class="email-card">
+            <!-- Header -->
             <div class="header">
-                <h1>🚀 Akun Server Anda Siap!</h1>
-                <p>Informasi akses lengkap untuk layanan hosting Anda</p>
+                <!-- Logo + App Name -->
+                <div class="header-logo-container">
+                    <img src="{{ asset('img/logo/Hoci_Ilustration.svg') }}" alt="Logo" />
+                    <div class="header-texts">
+                        <span class="header-hoci">{{ config('app.name', 'Billing System') }}</span>
+                    </div>
+                </div>
+                
+                <!-- Website URL -->
+                <div class="header-italic">
+                    <a href="{{ config('app.url', 'https://example.com') }}" style="color: #0a76dd; text-decoration: none;">{{ config('app.url', 'https://example.com') }}</a>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider"></div>
             </div>
 
-            {{-- Content --}}
-            <div class="content">
+            <div style="padding:0 34px 32px;">
+                <!-- Greeting -->
                 <div class="greeting">
-                    <h2>Halo, {{ $transaction->user->full_name }}!</h2>
-                    <p>Selamat! Transaksi Anda telah disetujui dan akun server Anda telah berhasil dibuat. Berikut adalah informasi lengkap untuk mengakses layanan hosting Anda.</p>
+                    <h2 style="margin: 0 0 8px 0; color: #333;">Halo, {{ $transaction->user->full_name }}!</h2>
+                    <p style="margin: 0;">Selamat! Transaksi Anda telah disetujui dan akun server Anda telah berhasil dibuat. Berikut adalah informasi lengkap untuk mengakses layanan hosting Anda.</p>
                 </div>
 
-                {{-- Transaction Info --}}
-                <div class="transaction-info">
-                    <h3 style="margin: 0 0 10px 0; color: #234e52;">📄 Informasi Transaksi</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
-                        <div><strong>Kode Transaksi:</strong> {{ $transaction->transaction_code }}</div>
-                        <div><strong>Produk:</strong> {{ $transaction->product->name_product }}</div>
-                        <div><strong>Tanggal Aktif:</strong> {{ \Carbon\Carbon::parse($transaction->start_date)->format('d F Y') }}</div>
-                        <div><strong>Berlaku Sampai:</strong> {{ \Carbon\Carbon::parse($transaction->end_date)->format('d F Y') }}</div>
-                    </div>
+                <!-- Judul & Subtitle Center -->
+                <div class="header-title">Akun Server Anda Siap</div>
+                <div class="header-subtitle">Informasi lengkap akses server Anda</div>
+
+                <!-- Informasi Transaksi -->
+                <div class="section-title">
+                    <i class="fas fa-file-invoice-dollar" style="color:#0a76dd;"></i> Informasi Transaksi
                 </div>
 
-                {{-- Subdomain Information --}}
-                <div class="info-card">
-                    <h3>Informasi Subdomain Anda</h3>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <label>Website (Tampilan)</label>
-                            <div class="value">{{ $transaction->subdomain_web }}</div>
-                            <div style="margin-top: 10px;">
-                                <a href="https://{{ $transaction->subdomain_web }}" class="link-button" target="_blank">
-                                    🌐 Buka Website
-                                </a>
-                            </div>
+                <div class="grid">
+                    <div class="grid-column">
+                        <div class="card">
+                            <div class="card-title">Kode Invoice</div>
+                            <div class="card-value">{{ $transaction->transaction_code }}</div>
+                            <div class="card-title">Tipe Layanan</div>
+                            <div class="card-value">{{ $transaction->product->name_product }}</div>
                         </div>
-                        <div class="info-item">
-                            <label>Server Management</label>
-                            <div class="value">{{ $transaction->subdomain_server }}</div>
-                            <div style="margin-top: 10px;">
-                                <a href="https://{{ $transaction->subdomain_server }}" class="link-button server" target="_blank">
-                                    ⚙️ Akses Server
-                                </a>
-                            </div>
+                    </div>
+                    <div class="grid-column">
+                        <div class="card">
+                            <div class="card-title">Tanggal Aktif</div>
+                            <div class="card-value">{{ \Carbon\Carbon::parse($transaction->start_date)->format('d F Y') }}</div>
+                            <div class="card-title">Tanggal Berakhir</div>
+                            <div class="card-value">{{ \Carbon\Carbon::parse($transaction->end_date)->format('d F Y') }}</div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Login Credentials --}}
-                <div class="info-card credentials-info">
-                    <h3>Kredensial Login Server</h3>
-                    <div class="info-grid">
-                        <div class="info-item credentials">
-                            <label>Username</label>
-                            <div class="value">{{ $serverUsername }}</div>
+                <!-- Informasi Subdomain -->
+                <div class="section-title">
+                    <i class="fas fa-globe" style="color:#0a76dd;"></i> Informasi Subdomain
+                </div>
+
+                <div class="grid">
+                    <div class="grid-column">
+                        <div class="card">
+                            <div class="card-title">Website Tampilan</div>
+                            <div class="card-value">{{ $transaction->subdomain_web }}</div>
+                            <a href="https://{{ $transaction->subdomain_web }}" class="button" style="color:white;" target="_blank">Buka Website</a>
                         </div>
-                        <div class="info-item credentials">
-                            <label>Password</label>
-                            <div class="value">{{ $serverPassword }}</div>
+                    </div>
+                    <div class="grid-column">
+                        <div class="card">
+                            <div class="card-title">Server Management</div>
+                            <div class="card-value">{{ $transaction->subdomain_server }}</div>
+                            <a href="https://{{ $transaction->subdomain_server }}" class="button" style="color:white;" target="_blank">Kelola Server</a>
                         </div>
                     </div>
                 </div>
 
-                {{-- Security Warning --}}
+                <!-- Kredensial Login -->
+                <div class="section-title">
+                    <i class="fas fa-key" style="color:#0a76dd;"></i> Kredensial Login Server
+                </div>
+
+                <div class="card">
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <div style="flex:1; min-width:48%;">
+                            <div class="card-title">USERNAME</div>
+                            <input type="text" value="{{ $serverUsername }}" readonly class="input-field" />
+                        </div>
+                        <div style="flex:1; min-width:48%;">
+                            <div class="card-title">PASSWORD</div>
+                            <input type="text" value="{{ $serverPassword }}" readonly class="input-field" />
+                        </div>
+                    </div>
+                </div>
+
                 <div class="warning">
-                    <strong>⚠️ Penting untuk Keamanan:</strong>
-                    <ul style="margin: 10px 0 0 20px; padding: 0;">
-                        <li>Jangan bagikan informasi login ini kepada siapa pun</li>
-                        <li>Segera ganti password setelah login pertama kali</li>
-                        <li>Gunakan password yang kuat dan unik</li>
-                        <li>Aktifkan autentikasi dua faktor jika tersedia</li>
-                    </ul>
+                    <strong>Catatan :</strong> Jangan berikan kredensial ini kepada siapa pun.
                 </div>
 
-                {{-- Additional Message --}}
+                <!-- Additional Message -->
                 @if($additionalMessage)
                 <div class="additional-message">
                     <h4 style="margin: 0 0 10px 0; color: #2b6cb0;">💬 Pesan Khusus dari Admin:</h4>
@@ -260,7 +380,7 @@
                 </div>
                 @endif
 
-                {{-- Admin Notes --}}
+                <!-- Admin Notes -->
                 @if($adminNotes)
                 <div class="additional-message">
                     <h4 style="margin: 0 0 10px 0; color: #2b6cb0;">📝 Catatan Admin:</h4>
@@ -268,28 +388,37 @@
                 </div>
                 @endif
 
-                {{-- Support Information --}}
-                <div class="info-card">
-                    <h3 style="margin: 0 0 15px 0;">📞 Butuh Bantuan?</h3>
-                    <p style="margin: 0;">Jika Anda mengalami kesulitan atau memiliki pertanyaan, jangan ragu untuk menghubungi tim support kami:</p>
-                    <div style="margin-top: 15px;">
-                        <div><strong>Email Support:</strong> {{ config('mail.support_email', 'support@company.com') }}</div>
-                        <div><strong>WhatsApp:</strong> {{ config('app.whatsapp_support', '+62 812-3456-7890') }}</div>
-                        <div><strong>Jam Operasional:</strong> Senin - Jumat, 09:00 - 18:00 WIB</div>
-                    </div>
+                <!-- Bantuan -->
+                <div class="section-title" style="margin-top:28px;">
+                    <i class="fas fa-life-ring" style="color:#0a76dd;"></i> Bantuan
                 </div>
-
-                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center;">
-                    <p><strong>Terima kasih telah mempercayai layanan kami!</strong></p>
-                    <p>Tim {{ config('app.name', 'Billing System') }}</p>
+                <div class="support-info">
+                    Jika Anda membutuhkan bantuan, silakan hubungi kami:<br /><br />
+                    <div class="support-item">
+                        <i class="fas fa-envelope support-icon"></i>
+                        <b class="support-label">Email</b>
+                        <span class="support-value">:</span>
+                        <a href="mailto:{{ config('mail.support_email', 'support@company.com') }}" style="color:#0a76dd; text-decoration: none;">{{ config('mail.support_email', 'support@company.com') }}</a>
+                    </div>
+                    <div class="support-item">
+                        <i class="fab fa-whatsapp support-icon"></i>
+                        <b class="support-label">WhatsApp</b>
+                        <span class="support-value">:</span>
+                        <a href="https://wa.me/{{ config('app.whatsapp_support', '+6281234567890') }}" style="color:#0a76dd; text-decoration: none;">{{ config('app.whatsapp_support', '+62 812-3456-7890') }}</a>
+                    </div>
+                    <div class="support-item">
+                        <i class="fas fa-clock support-icon"></i>
+                        <b class="support-label">Jam Operasional</b>
+                        <span class="support-value">:</span>
+                        <span>Senin - Jumat, 09:00 - 18:00 WIB</span>
+                    </div>
                 </div>
             </div>
 
-            {{-- Footer --}}
+            <!-- Footer -->
             <div class="footer">
-                <p><strong>{{ config('app.name', 'Billing System') }}</strong></p>
-                <p>Email ini dikirim secara otomatis, mohon jangan membalas email ini.</p>
-                <p>&copy; {{ date('Y') }} {{ config('app.name', 'Billing System') }}. All rights reserved.</p>
+                Terima kasih telah mempercayai layanan kami.<br />
+                <b>Tim Support {{ config('app.name', 'Billing System') }}</b>
             </div>
         </div>
     </div>

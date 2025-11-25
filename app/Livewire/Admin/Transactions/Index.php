@@ -4,12 +4,16 @@ namespace App\Livewire\Admin\Transactions;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\Products;
 use App\Models\Payments;
 use Illuminate\Support\Facades\Storage;
 
+#[Layout('components.layouts.app')]
+#[Title('Transactions Management')]
 class Index extends Component
 {
     use WithPagination;
@@ -26,6 +30,10 @@ class Index extends Component
     public $paymentFilter = '';
     public $perPage = 10;
     
+    // Sorting properties
+    public $sortField = 'created_at';
+    public $sortDirection = 'desc';
+    
     // Transaction properties untuk modal
     public $selectedTransaction;
     public $transactionId;
@@ -33,6 +41,18 @@ class Index extends Component
     public $subdomainServer = '';
     public $adminNotes = '';
     public $rejectReason = '';
+
+    // Mount method untuk handle filter dari dashboard
+    public function mount()
+    {
+        // Cek apakah ada filter status dari session (dari dashboard)
+        if (session()->has('transaction_filter_status')) {
+            $this->statusFilter = session('transaction_filter_status');
+            
+            // Hapus session setelah digunakan
+            session()->forget('transaction_filter_status');
+        }
+    }
 
     // Reset pagination ketika filter berubah
     public function updatingSearch()
@@ -52,6 +72,18 @@ class Index extends Component
     
     public function updatingPaymentFilter()
     {
+        $this->resetPage();
+    }
+    
+    // Method untuk sorting
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
         $this->resetPage();
     }
 
@@ -252,7 +284,25 @@ class Index extends Component
             ->when($this->paymentFilter, function ($query) {
                 $query->where('payment_id', $this->paymentFilter);
             })
-            ->orderBy('created_at', 'asc')
+            ->when($this->sortField, function ($query) {
+                if ($this->sortField === 'user_name') {
+                    $query->join('users', 'transactions.user_id', '=', 'users.id')
+                          ->orderBy('users.full_name', $this->sortDirection)
+                          ->select('transactions.*');
+                } elseif ($this->sortField === 'product_name') {
+                    $query->join('products', 'transactions.product_id', '=', 'products.id')
+                          ->orderBy('products.name_product', $this->sortDirection)
+                          ->select('transactions.*');
+                } elseif ($this->sortField === 'payment_method') {
+                    $query->join('payments', 'transactions.payment_id', '=', 'payments.id')
+                          ->orderBy('payments.payment_method', $this->sortDirection)
+                          ->select('transactions.*');
+                } else {
+                    $query->orderBy($this->sortField, $this->sortDirection);
+                }
+            }, function ($query) {
+                $query->orderBy('created_at', 'desc');
+            })
             ->paginate($this->perPage);
 
         $products = Products::where('status', 1)->get();

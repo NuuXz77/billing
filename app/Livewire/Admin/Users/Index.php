@@ -25,6 +25,10 @@ class Index extends Component
     public $roleFilter = '';
     public $statusFilter = '';
     public $perPage = 10;
+    
+    // Sorting properties
+    public $sortField = 'created_at';
+    public $sortDirection = 'desc';
 
     // Modal States
     public $showCreateModal = false;
@@ -59,6 +63,18 @@ class Index extends Component
     // Detail View
     public $detailUser;
 
+    // Mount method untuk handle filter dari dashboard
+    public function mount()
+    {
+        // Cek apakah ada filter status dari session (dari dashboard)
+        if (session()->has('user_filter_status')) {
+            $this->statusFilter = session('user_filter_status');
+            
+            // Hapus session setelah digunakan
+            session()->forget('user_filter_status');
+        }
+    }
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -71,6 +87,18 @@ class Index extends Component
 
     public function updatingStatusFilter()
     {
+        $this->resetPage();
+    }
+    
+    // Method untuk sorting
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
         $this->resetPage();
     }
 
@@ -259,9 +287,16 @@ class Index extends Component
             ->when($this->statusFilter, function ($query) {
                 $query->where('status', $this->statusFilter);
             })
-            ->orderByRaw("CASE WHEN role = 'admin' THEN 0 ELSE 1 END")
-            ->orderByRaw("CASE WHEN role = 'member' THEN user_code END ASC")
-            ->orderBy('created_at', 'desc')
+            ->when($this->sortField, function ($query) {
+                if ($this->sortField === 'transactions_count') {
+                    $query->orderBy('transactions_count', $this->sortDirection);
+                } else {
+                    $query->orderBy($this->sortField, $this->sortDirection);
+                }
+            }, function ($query) {
+                $query->orderByRaw("CASE WHEN role = 'admin' THEN 0 ELSE 1 END")
+                      ->orderBy('created_at', 'desc');
+            })
             ->paginate($this->perPage);
 
         // Add last transaction date for each user using a separate query

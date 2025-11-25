@@ -36,7 +36,7 @@
 
     {{-- Toast Notification --}}
     @if (session()->has('message'))
-        <div class="toast toast-top toast-end z-50" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+        <div class="toast toast-top toast-end z-9999" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
             x-transition>
             <div class="alert alert-success">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none"
@@ -442,12 +442,153 @@
                     <thead>
                         <tr class="bg-base-200">
                             <th class="font-semibold text-center" style="width: 50px;">#</th>
-                            <th class="font-semibold text-center" style="width: 160px;">Transaksi</th>
-                            <th class="font-semibold text-center" style="width: 180px;">Pelanggan</th>
-                            <th class="font-semibold text-center" style="width: 150px;">Produk</th>
-                            <th class="font-semibold text-center" style="width: 120px;">Pembayaran</th>
-                            <th class="font-semibold text-center" style="width: 120px;">Total</th>
-                            <th class="font-semibold text-center" style="width: 130px;">Status</th>
+                            <th class="font-semibold text-center cursor-pointer hover:bg-base-300 transition-colors" 
+                                style="width: 160px;" wire:click="sortBy('transaction_code')">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span>Transaksi</span>
+                                    @if($sortField === 'transaction_code')
+                                        @if($sortDirection === 'asc')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            <th class="font-semibold text-center cursor-pointer hover:bg-base-300 transition-colors" 
+                                style="width: 180px;" wire:click="sortBy('user_name')">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span>Pelanggan</span>
+                                    @if($sortField === 'user_name')
+                                        @if($sortDirection === 'asc')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            <th class="font-semibold text-center cursor-pointer hover:bg-base-300 transition-colors" 
+                                style="width: 150px;" wire:click="sortBy('product_name')">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span>Produk</span>
+                                    @if($sortField === 'product_name')
+                                        @if($sortDirection === 'asc')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            <th class="font-semibold text-center cursor-pointer hover:bg-base-300 transition-colors" 
+                                style="width: 120px;" wire:click="sortBy('payment_method')">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span>Pembayaran</span>
+                                    @if($sortField === 'payment_method')
+                                        @if($sortDirection === 'asc')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            <th class="font-semibold text-center cursor-pointer hover:bg-base-300 transition-colors" 
+                                style="width: 120px;" wire:click="sortBy('total_payment')">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span>Total</span>
+                                    @if($sortField === 'total_payment')
+                                        @if($sortDirection === 'asc')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            <th class="font-semibold text-center cursor-pointer hover:bg-base-300 transition-colors" 
+                                style="width: 130px;" wire:click="sortBy('status')">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span>Status</span>
+                                    @if($sortField === 'status')
+                                        @if($sortDirection === 'asc')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            {{-- <th class="font-semibold text-center cursor-pointer hover:bg-base-300 transition-colors" 
+                                style="width: 140px;" wire:click="sortBy('created_at')">
+                                <div class="flex items-center justify-center gap-1">
+                                    <span>Dibuat</span>
+                                    @if($sortField === 'created_at')
+                                        @if($sortDirection === 'asc')
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                            </svg>
+                                        @else
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th> --}}
                             <th class="font-semibold text-center" style="width: 80px;">Aksi</th>
                         </tr>
                     </thead>
@@ -477,10 +618,33 @@
                                 {{-- Customer Info --}}
                                 <td>
                                     <div class="flex items-center gap-2">
-                                        <div class="avatar placeholder">
-                                            <div class="bg-neutral text-neutral-content w-8 h-8 rounded-full">
-                                                <span class="text-xs font-semibold">{{ strtoupper(substr($transaction->user->full_name, 0, 2)) }}</span>
-                                            </div>
+                                        <div class="avatar">
+                                            @if($transaction->user->foto_profile)
+                                                <div class="w-8 h-8 rounded-full">
+                                                    <img src="{{ asset('storage/' . $transaction->user->foto_profile) }}" 
+                                                         alt="{{ $transaction->user->full_name }}"
+                                                         class="w-full h-full object-cover rounded-full">
+                                                </div>
+                                            @else
+                                                <div class="placeholder">
+                                                    <div class="bg-neutral text-neutral-content w-8 h-8 rounded-full flex items-center justify-center">
+                                                        <span class="text-xs font-semibold">
+                                                            @php
+                                                                $nameParts = explode(' ', $transaction->user->full_name);
+                                                                $initials = '';
+                                                                if (count($nameParts) == 1) {
+                                                                    $initials = strtoupper(substr($nameParts[0], 0, 1));
+                                                                } else {
+                                                                    foreach ($nameParts as $part) {
+                                                                        $initials .= strtoupper(substr(trim($part), 0, 1));
+                                                                    }
+                                                                }
+                                                                echo $initials;
+                                                            @endphp
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="text-left">
                                             <div class="font-semibold text-xs truncate">{{ $transaction->user->full_name }}</div>
@@ -543,6 +707,18 @@
                                         {{ $status['text'] }}
                                     </div>
                                 </td>
+
+                                {{-- Created At --}}
+                                {{-- <td class="text-center">
+                                    <div class="flex flex-col gap-0.5 items-center">
+                                        <div class="font-semibold text-xs">
+                                            {{ $transaction->created_at->format('d M Y') }}
+                                        </div>
+                                        <div class="text-xs text-base-content/60">
+                                            {{ $transaction->created_at->format('H:i:s') }}
+                                        </div>
+                                    </div>
+                                </td> --}}
 
                                 {{-- Actions Dropdown --}}
                                 <td>
@@ -615,7 +791,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center py-12">
+                                <td colspan="9" class="text-center py-12">
                                     <div class="flex flex-col items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"

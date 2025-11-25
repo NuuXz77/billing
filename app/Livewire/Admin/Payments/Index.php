@@ -21,6 +21,10 @@ class Index extends Component
     public $methodFilter = '';
     public $perPage = 10;
 
+    // Sorting
+    public $sortField = 'created_at';
+    public $sortDirection = 'desc';
+
     // Modal States
     public $showCreateModal = false;
     public $showEditModal = false;
@@ -55,6 +59,18 @@ class Index extends Component
 
     public function updatingMethodFilter()
     {
+        $this->resetPage();
+    }
+
+    public function sortBy($field)
+    {
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
+        }
+        
         $this->resetPage();
     }
 
@@ -220,7 +236,15 @@ class Index extends Component
             ->when($this->methodFilter, function ($query) {
                 $query->where('payment_method', $this->methodFilter);
             })
-            ->orderBy('created_at', 'desc')
+            ->when($this->sortField && $this->sortDirection, function ($query) {
+                if ($this->sortField === 'transactions_count') {
+                    $query->orderBy('transactions_count', $this->sortDirection);
+                } else {
+                    $query->orderBy($this->sortField, $this->sortDirection);
+                }
+            }, function ($query) {
+                $query->orderBy('created_at', 'desc');
+            })
             ->paginate($this->perPage);
 
         // Add last transaction date for each payment using a separate query

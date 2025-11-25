@@ -26,7 +26,23 @@
 
         {{-- Plans Grid --}}
         <div class="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto items-stretch mb-8">
-            @forelse(\App\Models\Product::active()->orderBy('price_monthly', 'asc')->get() as $index => $product)
+            @php
+                // Ambil semua produk aktif
+                $allProducts = \App\Models\Product::active()->get()->keyBy('id');
+                
+                // Definisikan urutan tetap berdasarkan ID
+                // Urutan: ID 1 (Starter/kiri) -> ID 3 (Enterprise/tengah) -> ID 2 (Business/kanan)
+                $orderedIds = [1, 3, 2];
+                $products = collect();
+                
+                foreach ($orderedIds as $id) {
+                    if (isset($allProducts[$id])) {
+                        $products->push($allProducts[$id]);
+                    }
+                }
+            @endphp
+            
+            @forelse($products as $index => $product)
             {{-- Plan Card --}}
             <div class="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-blue-200 hover:-translate-y-2 flex flex-col h-full">
                 {{-- Popular Badge (untuk produk kedua) --}}

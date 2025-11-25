@@ -30,8 +30,8 @@ class Index extends Component
     
     public function loadDashboardData()
     {
-        // Total Members (only users with user_code starting with "MBR")
-        $this->totalMembers = User::where('user_code', 'like', 'MBR%')->count();
+        // Total Members (only users with user_code starting with "MBRHOCI")
+        $this->totalMembers = User::where('user_code', 'like', 'MBRHOCI%')->count();
         
         // Active Subscriptions
         $this->activeSubscriptions = Transaction::where('status', 'active')

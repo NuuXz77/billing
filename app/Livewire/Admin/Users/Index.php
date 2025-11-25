@@ -172,7 +172,24 @@ class Index extends Component
             'status' => 'required|in:active,inactive,suspended',
         ]);
 
-        $validated['user_code'] = 'MBR-' . strtoupper(uniqid());
+        // Generate user code berdasarkan role
+        if ($validated['role'] === 'admin') {
+            $validated['user_code'] = '#ADMINHOCI';
+        } else {
+            // Generate untuk member dengan auto-increment
+            $lastMember = User::where('role', 'member')
+                              ->where('user_code', 'like', 'MBRHOCI%')
+                              ->orderBy('user_code', 'desc')
+                              ->first();
+            
+            if (!$lastMember) {
+                $validated['user_code'] = 'MBRHOCI0001';
+            } else {
+                $number = (int) substr($lastMember->user_code, 7) + 1;
+                $validated['user_code'] = 'MBRHOCI' . str_pad($number, 4, '0', STR_PAD_LEFT);
+            }
+        }
+        
         $validated['password'] = Hash::make($validated['password']);
         $validated['last_active'] = now();
 

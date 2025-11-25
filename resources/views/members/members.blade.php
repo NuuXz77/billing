@@ -56,6 +56,8 @@
         @include('members.sections.partials.cart_section')
     @endif
     
+    {{-- Modal Info Lengkapi Profile (otomatis muncul jika profil belum lengkap) --}}
+    @include('members.sections.partials.partials_2.dropdown_transaksi.modal_informasi.modal_info_lengkapi_infoprofile')
     
     {{-- Stack untuk scripts tambahan dari child views --}}
     @stack('scripts')

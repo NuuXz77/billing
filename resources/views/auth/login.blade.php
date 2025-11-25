@@ -42,7 +42,7 @@
                     <!-- Email Input -->
                     <div>
                         <label class="block text-gray-700 font-medium mb-1.5 text-xs" for="email">
-                            Email / Username
+                            Email
                         </label>
                         <input 
                             type="text" 

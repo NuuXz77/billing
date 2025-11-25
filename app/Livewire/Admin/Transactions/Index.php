@@ -41,6 +41,11 @@ class Index extends Component
     public $subdomainServer = '';
     public $adminNotes = '';
     public $rejectReason = '';
+    
+    // Server credentials untuk email
+    public $serverUsername = '';
+    public $serverPassword = '';
+    public $additionalMessage = '';
 
     // Mount method untuk handle filter dari dashboard
     public function mount()
@@ -131,23 +136,69 @@ class Index extends Component
     // Method untuk konfirmasi akhir oleh admin
     public function confirmTransaction()
     {
-        $transaction = Transaction::findOrFail($this->transactionId);
-        
-        // Update status menjadi active dan catat waktu konfirmasi
-        $transaction->update([
-            'status' => 'active',
-            'admin_notes' => $this->adminNotes,
-            'confirmed_at' => now(),
-            'start_date' => now(),
-            'end_date' => $transaction->billing_cycle === 'yearly' 
-                ? now()->addYear() 
-                : now()->addMonth(),
+        // Validate input
+        $this->validate([
+            'serverUsername' => 'required|string|max:255',
+            'serverPassword' => 'required|string|max:255',
+            'additionalMessage' => 'nullable|string|max:1000',
+        ], [
+            'serverUsername.required' => 'Username server wajib diisi',
+            'serverPassword.required' => 'Password server wajib diisi',
         ]);
-        
-        $this->showConfirmAdminModal = false;
-        $this->reset(['transactionId', 'adminNotes', 'subdomainWeb', 'subdomainServer']);
-        
-        session()->flash('message', 'Transaksi berhasil dikonfirmasi dan diaktifkan!');
+
+        try {
+            $transaction = Transaction::findOrFail($this->transactionId);
+            
+            \Log::info('=== KONFIRMASI TRANSAKSI DARI INDEX ===', [
+                'transaction_id' => $this->transactionId,
+                'transaction_code' => $transaction->transaction_code,
+                'user_email' => $transaction->user->email,
+            ]);
+            
+            // Update status menjadi active dan catat waktu konfirmasi
+            $transaction->update([
+                'status' => 'active',
+                'admin_notes' => $this->additionalMessage,
+                'confirmed_at' => now(),
+                'start_date' => now()->toDateString(),
+                'end_date' => now()->addMonth()->toDateString(),
+            ]);
+            
+            // Kirim email akun server
+            \Log::info('Mengirim email akun server ke: ' . $transaction->user->email);
+            
+            \Mail::to($transaction->user->email)->send(
+                new \App\Mail\SendAccountServer(
+                    $transaction,
+                    $this->serverUsername,
+                    $this->serverPassword,
+                    $this->additionalMessage,
+                    $this->additionalMessage
+                )
+            );
+            
+            \Log::info('Email berhasil dikirim!');
+            
+            // Update admin notes dengan info email
+            $transaction->update([
+                'admin_notes' => ($this->additionalMessage ? $this->additionalMessage . "\n\n" : '') . 
+                                "✅ Email akun server berhasil dikirim pada " . now()->format('d F Y H:i:s') . 
+                                "\n📧 Dikirim ke: {$transaction->user->email}" .
+                                "\n👤 Username: {$this->serverUsername}" .
+                                "\n🔑 Password: {$this->serverPassword}" .
+                                "\n🌐 Subdomain Web: {$transaction->subdomain_web}" .
+                                "\n🖥️ Subdomain Server: {$transaction->subdomain_server}"
+            ]);
+            
+            $this->showConfirmAdminModal = false;
+            $this->reset(['transactionId', 'serverUsername', 'serverPassword', 'additionalMessage', 'subdomainWeb', 'subdomainServer']);
+            
+            session()->flash('message', "✅ Transaksi {$transaction->transaction_code} berhasil dikonfirmasi dan email telah dikirim ke {$transaction->user->email}!");
+            
+        } catch (\Exception $e) {
+            \Log::error('Error konfirmasi transaksi: ' . $e->getMessage());
+            session()->flash('error', 'Gagal mengkonfirmasi transaksi: ' . $e->getMessage());
+        }
     }
     
     // Method untuk reject transaction

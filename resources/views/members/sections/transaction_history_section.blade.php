@@ -429,9 +429,14 @@
                     setTimeout(() => {
                         const modalId = 'payNowModal-' + transactionId;
                         const modal = document.getElementById(modalId);
+                        const navbar = document.querySelector('nav');
                         if (modal) {
                             modal.classList.remove('hidden');
                             document.body.style.overflow = 'hidden';
+                            // Hide navbar behind modal
+                            if (navbar) {
+                                navbar.style.zIndex = '0';
+                            }
                         }
                     }, 500);
                 })

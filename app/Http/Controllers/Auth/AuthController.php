@@ -41,12 +41,15 @@ class AuthController extends Controller
             // tambahkan update last_login
             $user->status = 'active';
             $user->save();
+            
+            $greeting = 'Halo, ' . $user->full_name . '! Selamat datang kembali.';
+            
             if ($user->role === 'admin') {
                 return redirect()->intended('/admin/dashboard')
-                    ->with('success', 'Selamat datang Admin!');
+                    ->with('success', 'Halo, ' . $user->full_name . '! Selamat datang Admin!');
             } else {
                 return redirect()->intended('/dashboard')
-                    ->with('success', 'Selamat datang kembali!');
+                    ->with('success', $greeting);
             }
         }
 
@@ -64,14 +67,20 @@ class AuthController extends Controller
     //buatkan fungsi auto number untuk member
     public function generateUserCode()
     {
-        $lastUser = User::where('role', 'member')->orderBy('created_at', 'desc')->first();
+        // Ambil semua user dengan role member yang punya user_code format MBRHOCI
+        $lastUser = User::where('role', 'member')
+                        ->where('user_code', 'like', 'MBRHOCI%')
+                        ->orderBy('user_code', 'desc')
+                        ->first();
+        
         if (!$lastUser) {
-            return 'MBR-0001';
+            return 'MBRHOCI0001';
         }
 
+        // Ekstrak angka dari user_code terakhir (MBRHOCI0001 -> 0001)
         $lastCode = $lastUser->user_code;
-        $number = (int) substr($lastCode, 4) + 1;
-        return 'MBR-' . str_pad($number, 4, '0', STR_PAD_LEFT);
+        $number = (int) substr($lastCode, 7) + 1; // 7 karena panjang "MBRHOCI"
+        return 'MBRHOCI' . str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 
     public function register(Request $request)

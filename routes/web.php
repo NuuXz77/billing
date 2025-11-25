@@ -58,19 +58,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/auth/register/ajax', [App\Http\Controllers\AuthController::class, 'registerAjax'])->name('register.ajax');
 });
 
-//Route untuk authenticated users
-Route::middleware('auth')->group(function () {
-    // Profile update route
-    Route::post('/profile/update', [App\Http\Controllers\AuthController::class, 'updateProfile'])->name('profile.update');
-    
-    // Password update route
-    Route::post('/password/update', [App\Http\Controllers\AuthController::class, 'updatePassword'])->name('password.update');
-	
 Route::get('/kirimemail',[]);
-// Route::get('/', function () {
-//     return view('frontend.index');
-// })->name('index');
-});
 
 //inikan menambahkan file route lain
 require __DIR__ . '/auth.php';

@@ -14,7 +14,7 @@
                 </label>
                 <div class="relative">
                     <input :type="showCurrentPassword ? 'text' : 'password'" name="current_password" required 
-                           class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all"
+                           class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all text-gray-900"
                            :class="!editMode && 'bg-gray-50'" 
                            :readonly="!editMode"
                            placeholder="Enter your current password">
@@ -41,7 +41,7 @@
                     <div class="relative">
                         <input :type="showNewPassword ? 'text' : 'password'" name="new_password" required 
                                @input="validatePassword"
-                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all"
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all text-gray-900"
                                :class="!editMode && 'bg-gray-50'" 
                                :readonly="!editMode"
                                placeholder="Enter new password"
@@ -67,7 +67,7 @@
                     </label>
                     <div class="relative">
                         <input :type="showConfirmPassword ? 'text' : 'password'" name="new_password_confirmation" required 
-                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all"
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all text-gray-900"
                                :class="!editMode && 'bg-gray-50'" 
                                :readonly="!editMode"
                                placeholder="Confirm new password"
@@ -136,7 +136,7 @@
                 {{-- Cancel & Save Buttons (shown when in edit mode) --}}
                 <template x-if="editMode">
                     <div class="flex items-center gap-3">
-                        <button type="button" @click="cancelEdit()" class="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all font-semibold">
+                        <button type="button" @click="cancelEdit()" class="px-6 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-all font-semibold text-gray-900">
                             Cancel
                         </button>
                         <button type="submit" class="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-xl transition-all font-semibold flex items-center gap-2" :disabled="loading">

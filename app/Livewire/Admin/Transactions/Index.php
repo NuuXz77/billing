@@ -234,7 +234,9 @@ class Index extends Component
                 $query->where(function ($q) {
                     $q->where('transaction_code', 'like', '%' . $this->search . '%')
                       ->orWhereHas('user', function ($userQuery) {
-                          $userQuery->where('full_name', 'like', '%' . $this->search . '%');
+                          $userQuery->where('full_name', 'like', '%' . $this->search . '%')
+                                    ->orWhere('email', 'like', '%' . $this->search . '%')
+                                    ->orWhere('username', 'like', '%' . $this->search . '%');
                       })
                       ->orWhereHas('product', function ($productQuery) {
                           $productQuery->where('name_product', 'like', '%' . $this->search . '%');
@@ -250,7 +252,7 @@ class Index extends Component
             ->when($this->paymentFilter, function ($query) {
                 $query->where('payment_id', $this->paymentFilter);
             })
-            ->orderBy('user_transaction_number', 'asc')
+            ->orderBy('created_at', 'asc')
             ->paginate($this->perPage);
 
         $products = Products::where('status', 1)->get();

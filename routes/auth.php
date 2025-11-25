@@ -146,6 +146,10 @@ Route::middleware(['member.session', 'auth:member', 'role:member'])->group(funct
         return view('members.members', ['section' => 'account-settings']);
     })->name('members.settings');
     
+    // Profile & Password Update Routes
+    Route::post('/profile/update', [App\Http\Controllers\AuthController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/password/update', [App\Http\Controllers\AuthController::class, 'updatePassword'])->name('password.update');
+    
     // Support Routes
     Route::get('/support/live-chat', function () {
         return view('members.members', ['section' => 'live-chat']);
@@ -153,7 +157,8 @@ Route::middleware(['member.session', 'auth:member', 'role:member'])->group(funct
     
     // Cart Routes
     Route::get('/members/cart', function () {
-        return view('members.members', ['section' => 'cart']);
+        $payments = \App\Models\Payment::where('status', 'active')->get();
+        return view('members.members', ['section' => 'cart', 'payments' => $payments]);
     })->name('members.cart');
     
     Route::post('/members/checkout', function (\Illuminate\Http\Request $request) {
@@ -167,6 +172,7 @@ Route::middleware(['member.session', 'auth:member', 'role:member'])->group(funct
                 'duration' => 'required|integer|min:1',
                 'total_payment' => 'required|numeric|min:0',
                 'billing_cycle' => 'required|string',
+                'payment_id' => 'required|exists:payments,id',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             \Log::error('Validation Error:', $e->errors());
@@ -180,13 +186,13 @@ Route::middleware(['member.session', 'auth:member', 'role:member'])->group(funct
         // Ambil data product
         $product = \App\Models\Product::findOrFail($validated['product_id']);
         
-        // Ambil payment method BRI
-        $payment = \App\Models\Payment::where('payment_bank', 'BRI')->first();
+        // Ambil payment method dari request
+        $payment = \App\Models\Payment::findOrFail($validated['payment_id']);
         
-        if (!$payment) {
+        if (!$payment || $payment->status !== 'active') {
             return response()->json([
                 'success' => false,
-                'message' => 'Metode pembayaran BRI tidak tersedia'
+                'message' => 'Metode pembayaran tidak tersedia'
             ], 400);
         }
         

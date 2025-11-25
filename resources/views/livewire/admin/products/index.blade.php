@@ -36,7 +36,7 @@
 
     {{-- Toast Notification --}}
     @if ($toastMessage)
-        <div class="toast toast-top toast-end z-50" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+        <div class="toast toast-top toast-end z-9999" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
             x-transition>
             @if ($toastType === 'success')
                 <div class="alert alert-success">
@@ -249,11 +249,112 @@
                     <thead>
                         <tr class="bg-base-200">
                             <th class="font-semibold">#</th>
-                            <th class="font-semibold">Produk</th>
+                            <th class="font-semibold cursor-pointer hover:bg-base-300 transition-colors" 
+                                wire:click="sortBy('name_product')">
+                                <div class="flex items-center gap-2">
+                                    <span>Produk</span>
+                                    @if($sortField === 'name_product')
+                                        @if($sortDirection === 'asc')
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg class="w-4 h-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
                             <th class="font-semibold">Fitur</th>
-                            <th class="font-semibold">Harga</th>
-                            <th class="font-semibold">Penjualan</th>
-                            <th class="font-semibold">Status</th>
+                            <th class="font-semibold cursor-pointer hover:bg-base-300 transition-colors" 
+                                wire:click="sortBy('price_monthly')">
+                                <div class="flex items-center gap-2">
+                                    <span>Harga</span>
+                                    @if($sortField === 'price_monthly')
+                                        @if($sortDirection === 'asc')
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg class="w-4 h-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            <th class="font-semibold cursor-pointer hover:bg-base-300 transition-colors" 
+                                wire:click="sortBy('transactions_count')">
+                                <div class="flex items-center gap-2">
+                                    <span>Penjualan</span>
+                                    @if($sortField === 'transactions_count')
+                                        @if($sortDirection === 'asc')
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg class="w-4 h-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            <th class="font-semibold cursor-pointer hover:bg-base-300 transition-colors" 
+                                wire:click="sortBy('status')">
+                                <div class="flex items-center gap-2">
+                                    <span>Status</span>
+                                    @if($sortField === 'status')
+                                        @if($sortDirection === 'asc')
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg class="w-4 h-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
+                            <th class="font-semibold cursor-pointer hover:bg-base-300 transition-colors" 
+                                wire:click="sortBy('created_at')">
+                                <div class="flex items-center gap-2">
+                                    <span>Dibuat</span>
+                                    @if($sortField === 'created_at')
+                                        @if($sortDirection === 'asc')
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+                                            </svg>
+                                        @else
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"></path>
+                                            </svg>
+                                        @endif
+                                    @else
+                                        <svg class="w-4 h-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                                        </svg>
+                                    @endif
+                                </div>
+                            </th>
                             <th class="font-semibold">Aksi</th>
                         </tr>
                     </thead>
@@ -349,6 +450,18 @@
                                     @endif
                                 </td>
 
+                                {{-- Created At --}}
+                                <td>
+                                    <div class="flex flex-col gap-1">
+                                        <div class="text-sm font-medium">
+                                            {{ $product->created_at->format('d M Y') }}
+                                        </div>
+                                        <div class="text-xs text-slate-400">
+                                            {{ $product->created_at->format('H:i') }}
+                                        </div>
+                                    </div>
+                                </td>
+
                                 {{-- Actions Dropdown --}}
                                 <td>
                                     <div class="flex justify-center">
@@ -405,7 +518,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center py-12">
+                                <td colspan="8" class="text-center py-12">
                                     <div class="flex flex-col items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"

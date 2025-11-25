@@ -51,6 +51,14 @@ class Product extends Model
     }
 
     /**
+     * Relasi ke transactions
+     */
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'product_id', 'id');
+    }
+
+    /**
      * Format price dengan Rupiah
      */
     public function getFormattedPriceAttribute()

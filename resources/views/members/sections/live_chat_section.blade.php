@@ -1,4 +1,24 @@
 {{-- Live Chat Section --}}
+<style>
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .animate-spin-btn {
+        animation: spin 1s linear infinite;
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
 <section id="live-chat" class="fixed inset-0 bg-gray-50 flex" style="padding-top: 80px;">
     
     {{-- Include Sidebar --}}
@@ -107,6 +127,14 @@
 
 {{-- JavaScript for Chat Functionality --}}
 <script>
+// Close Info Modal Function (Global)
+function closeInfoModal() {
+    const infoModal = document.getElementById('infoModal');
+    if (infoModal) {
+        infoModal.classList.add('hidden');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Clear chat history on page load (since no auth/database yet)
     localStorage.removeItem('chatHistory');
@@ -116,6 +144,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatInput = document.getElementById('chat-input');
     const sendButton = document.getElementById('send-button');
     const chatMessages = document.getElementById('chat-messages');
+    
+    // Check if elements exist
+    if (!chatForm || !chatInput || !sendButton || !chatMessages) {
+        console.error('Live chat elements not found!');
+        return;
+    }
+    
+    console.log('Live chat initialized successfully');
     
     // Store conversation history
     let conversationHistory = [];

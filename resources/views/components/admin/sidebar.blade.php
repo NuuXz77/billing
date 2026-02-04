@@ -205,7 +205,7 @@
                         </a>
                     </li>
 
-                    <!-- System Settings -->
+                    <!-- System Settings
                     <li>
                         <a href="/admin/settings" wire:navigate
                             :class="(sidebarOpen || hoverOpen) ? 'justify-start' : 'justify-center'"
@@ -220,6 +220,7 @@
                                 class="font-medium whitespace-nowrap">Settings</span>
                         </a>
                     </li>
+                    -->
                 </ul>
             </nav>
         @else

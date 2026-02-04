@@ -681,7 +681,7 @@
                     <h2 class="card-title text-2xl">Laporan Produk</h2>
                     <p class="text-slate-600">Performance setiap produk periode ini</p>
                 </div>
-                <div class="flex gap-2">
+                <!--<div class="flex gap-2">
                     <button wire:click="exportPDF('product-detail')" class="btn btn-outline btn-primary btn-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -698,7 +698,7 @@
                         </svg>
                         Export Excel
                     </button>
-                </div>
+                </div> -->
             </div>
 
             <div class="overflow-x-auto">
@@ -766,7 +766,7 @@
     </div>
 
     {{-- 5. Export Summary --}}
-    <div class="card bg-base-100rom-slate-50 to-slate-100 border border-slate-300">
+    <!-- <div class="card bg-base-100rom-slate-50 to-slate-100 border border-slate-300">
         <div class="card-body p-6">
             <div class="text-center">
                 <h3 class="text-xl font-bold mb-2">Export Laporan Lengkap</h3>
@@ -795,7 +795,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     {{-- Include All Modal Files --}}
     @include('livewire.admin.reports.modals.detail-pendapatan')

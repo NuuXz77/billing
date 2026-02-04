@@ -292,7 +292,7 @@
                     {{-- Action Buttons --}}
                     <div class="col-span-1 lg:col-span-2 flex">
                         <div class="grid grid-cols-2 gap-2 w-full">
-                            <div class="dropdown dropdown-end">
+                            <!--<div class="dropdown dropdown-end">
                                 <div tabindex="0" role="button" class="btn btn-ghost w-full">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
@@ -319,7 +319,7 @@
                                             Refresh Data
                                         </a></li>
                                 </ul>
-                            </div>
+                            </div> -->
                             {{-- Per Page Select --}}
                             <select wire:model.live="perPage" class="select select-bordered w-full">
                                 <option value="10">10</option>
